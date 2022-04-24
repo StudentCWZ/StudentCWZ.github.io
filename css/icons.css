@@ -23,9 +23,41 @@
 }
 
 .fa-history {
-    color: #1e7398;
+    color: #d4237a;
 }
 
 .fa-spin {
-    color: #d4237a;
+    color: #1e5798;
+}
+
+.fa-tags {
+    color: #c27838;
+}
+
+.fa-folder-open {
+    color: rgba(186, 6, 231);
+}
+
+.fa-link {
+    color: rgb(34, 218, 241);
+}
+
+.fa-comment-dots {
+    color: #21a232;
+}
+
+.fa-paper-plane {
+    color: #f47466;
+}
+
+.fa-home {
+    color: rgb(252, 122, 0);
+}
+
+.fa-gift {
+    color: rgb(252, 0, 88);
+}
+
+.fa-search {
+    color: #6693f4;
 }
