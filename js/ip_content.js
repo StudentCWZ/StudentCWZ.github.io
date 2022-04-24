@@ -1,1 +1,36 @@
-"use strict";function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function getBrowserInfo(){var e=navigator.userAgent.toLowerCase();return 0<e.indexOf("msie")?e.match(/msie [\d.]+;/gi):0<e.indexOf("firefox")?e.match(/firefox\/[\d.]+/gi):0<e.indexOf("chrome")?e.match(/chrome\/[\d.]+/gi):0<e.indexOf("safari")&&e.indexOf("chrome")<0?e.match(/safari\/[\d.]+/gi):void 0}var ip_content=document.querySelector(".ip_content");null!=ip_content&&null!=("undefined"==typeof returnCitySN?"undefined":_typeof(returnCitySN))&&(ip_content.innerHTML='欢迎来自 <span class="p red">'+returnCitySN.cname+"</span> 的小伙伴<br>访问IP为： <span class='p cyan'>"+returnCitySN.cip+"</span><br>浏览器版本：<span class='p blue'>"+getBrowserInfo()+"</span>");
+//获取当前IP地址和浏览器标识
+function getBrowserInfo() {
+    var agent = navigator.userAgent.toLowerCase();
+
+    var regStr_ie = /msie [\d.]+;/gi;
+    var regStr_ff = /firefox\/[\d.]+/gi
+    var regStr_chrome = /chrome\/[\d.]+/gi;
+    var regStr_saf = /safari\/[\d.]+/gi;
+
+    //IE
+    if (agent.indexOf("msie") > 0) {
+        return agent.match(regStr_ie);
+    }
+
+    //firefox
+    if (agent.indexOf("firefox") > 0) {
+        return agent.match(regStr_ff);
+    }
+
+    //Chrome
+    if (agent.indexOf("chrome") > 0) {
+        return agent.match(regStr_chrome);
+    }
+
+    //Safari
+    if (agent.indexOf("safari") > 0 && agent.indexOf("chrome") < 0) {
+        return agent.match(regStr_saf);
+    }
+}
+
+var ip_content = document.querySelector(".ip_content");
+
+if (ip_content != null && typeof (returnCitySN) != undefined) {
+    ip_content.innerHTML = '欢迎来自 <span class="p red">' + returnCitySN["cname"] + "</span> 的小伙伴<br>" + "访问IP为： <span class='p cyan'>" + returnCitySN["cip"] + "</span><br>浏览器版本：<span class='p blue'>" + getBrowserInfo() + '</span>';
+}
+
