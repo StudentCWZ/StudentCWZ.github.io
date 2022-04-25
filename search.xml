@@ -4,6 +4,64 @@
   
     
     <entry>
+      <title>Mac 平台配置 iTerm2 + oh-my-zsh</title>
+      <link href="/post/9ca5bb98.html"/>
+      <url>/post/9ca5bb98.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="Mac-安装-iTerm2"><a href="#Mac-安装-iTerm2" class="headerlink" title="Mac 安装 iTerm2"></a>Mac 安装 iTerm2</h2><ul><li>下载 iTerm2</li><li><a href="https://www.iterm2.com/index.html">官方链接</a></li></ul><h2 id="Mac-安装-oh-my-zsh"><a href="#Mac-安装-oh-my-zsh" class="headerlink" title="Mac 安装 oh-my-zsh"></a>Mac 安装 oh-my-zsh</h2><h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><ul><li>Mac 系统一般预置安装了 zsh，如果当前默认 shell 是 bash，则修改默认 shell，如果默认的 shell 是 zsh，则不改变<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chsh -s /bin/zsh</span><br></pre></td></tr></table></figure></li><li>你的 Mac 上需要安装 git</li></ul><h3 id="手动安装"><a href="#手动安装" class="headerlink" title="手动安装"></a>手动安装</h3><ul><li>克隆代码<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh</span><br></pre></td></tr></table></figure></li><li>备份已有的 .zshrc 文件<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> ~/.zshrc ~/.zshrc.bak</span><br></pre></td></tr></table></figure></li><li>新建一个 zsh 的配置文件，可以拷贝一份已有的模板文件来创建 zsh 的配置文件<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc</span><br></pre></td></tr></table></figure></li><li>重新打开一个终端窗口，它将自动开启加载 oh-my-zsh 配置的 zsh</li><li>以上四步结束后，可能会存在 zsh 目录权限问题，解决问题如下：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 755 /usr/local/share/zsh</span><br><span class="line"><span class="built_in">chmod</span> 755 /usr/local/share/zsh/site-functions</span><br></pre></td></tr></table></figure></li></ul><h3 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h3><h4 id="命令高亮插件"><a href="#命令高亮插件" class="headerlink" title="命令高亮插件"></a>命令高亮插件</h4><ul><li>下载高亮插件<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure></li><li>编辑配置文件，使用插件<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.zshrc</span><br></pre></td></tr></table></figure></li><li>在 .zshrc 文件的 plugins 后面加入 zsh-syntax-highlighting 插件名</li><li>重启终端</li></ul><h4 id="命令提示插件"><a href="#命令提示插件" class="headerlink" title="命令提示插件"></a>命令提示插件</h4><ul><li>下载命令提示插件<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions</span><br></pre></td></tr></table></figure></li><li>编辑配置文件，使用插件<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.zshrc</span><br></pre></td></tr></table></figure></li><li>在 .zshrc 文件的 plugins 后面加入 zsh-autosuggestions 插件名</li><li>重启终端</li></ul><h2 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h2><h3 id="更换-zsh-主题为-Dracula"><a href="#更换-zsh-主题为-Dracula" class="headerlink" title="更换 zsh 主题为 Dracula"></a>更换 zsh 主题为 Dracula</h3><ul><li>下载主题文件<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/dracula/zsh.git</span><br></pre></td></tr></table></figure></li><li>创建一个指向 oh-my-zsh 主题文件夹的符号链接，DRACULA_THEME 是刚才下载主题的目录<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ln</span> -s <span class="variable">$DRACULA_THEME</span>/dracula.zsh-theme ~/.oh-my-zsh/themes/dracula.zsh-theme</span><br></pre></td></tr></table></figure></li><li>修改 zsh 主题，编辑 .zshrc 文件，修改 ZSH_THEME 为 “dracula” <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.zshrc</span><br><span class="line">ZSH_THEME=<span class="string">&quot;dracula&quot;</span> </span><br></pre></td></tr></table></figure></li></ul><h3 id="更换-iterm2-主题为-Dracula"><a href="#更换-iterm2-主题为-Dracula" class="headerlink" title="更换 iterm2 主题为 Dracula"></a>更换 iterm2 主题为 Dracula</h3><ul><li><p>下载 iterm2 的 Dracula 主题</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/dracula/iterm.git</span><br></pre></td></tr></table></figure></li><li><p>设置主题</p><ul><li>iTerm2 &gt; Preferences &gt; Profiles &gt; Colors Tab</li><li>Open the Color Presets…</li><li>从列表中选择 import</li><li>选择刚才下载主题中 Dracula.itermcolors 文件，确定</li></ul></li><li><p>再次打开 Color Presets… ，选择 Dracula</p></li><li><p>重启终端</p></li></ul><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul><li><a href="https://blog.csdn.net/daiyuhe/article/details/88667875">利用 iTerm2+oh-my-zsh+Dracula 主题打造我的 Mac 终端利器</a></li><li><a href="https://blog.csdn.net/qq_43656353/article/details/106444661">关于 zsh 目录权限问题的解决</a></li><li><a href="https://blog.csdn.net/weixin_43376075/article/details/110840009">mac 入门-安装 oh my zsh</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Mac </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 环境配置 </tag>
+            
+            <tag> iTerm2 </tag>
+            
+            <tag> Dracula </tag>
+            
+            <tag> oh-my-zsh </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Mac 平台安装 MongoDB</title>
+      <link href="/post/d6049e8.html"/>
+      <url>/post/d6049e8.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="MongoDB-下载"><a href="#MongoDB-下载" class="headerlink" title="MongoDB 下载"></a>MongoDB 下载</h2><ul><li>MongoDB 提供了 Mac 平台上 64 位的安装包，你可以在官网下载安装包</li><li><a href="https://www.mongodb.com/try/download/community">官方下载链接</a></li></ul><h2 id="MongoDB-安装步骤"><a href="#MongoDB-安装步骤" class="headerlink" title="MongoDB 安装步骤"></a>MongoDB 安装步骤</h2><ul><li>找到下载的 MongoDB 压缩文件 mongodb-macos-x86_64-5.0.5.tgz</li><li>移动文件<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">mv</span> mongodb-macos-x86_64-5.0.5.tgz /usr/local/</span><br></pre></td></tr></table></figure></li><li>解压<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tar -zxvf mongodb-macos-x86_64-5.0.5.tgz</span><br></pre></td></tr></table></figure></li><li>重命名<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">mv</span> mongodb-macos-x86_64-5.0.5/ mongodb</span><br></pre></td></tr></table></figure></li><li>删除压缩文件<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">rm</span> mongodb-macos-x86_64-5.0.5.tgz</span><br></pre></td></tr></table></figure></li><li>添加环境变量(安装过 oh-my-zsh)<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(1) vim ~/.zshrc</span><br><span class="line">(2) 添加 PATH</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/usr/local/mongodb/bin</span><br><span class="line">(3) 使修改立即生效</span><br><span class="line"><span class="built_in">source</span> ~/.zshrc</span><br></pre></td></tr></table></figure></li><li>创建日志及数据存放的目录<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(1) 切换到 /usr/local/var/db 目录</span><br><span class="line"><span class="built_in">mkdir</span> mongodb</span><br><span class="line">(2) 切换到 /usr/local/var/log 目录</span><br><span class="line"><span class="built_in">touch</span> mongodb.log</span><br></pre></td></tr></table></figure></li><li>添加配置文件<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">(1) 切换到 /usr/local/etc 目录下</span><br><span class="line">(2) vim mongodb.conf</span><br><span class="line">(3) 添加内容</span><br><span class="line"><span class="comment"># 数据库路径</span></span><br><span class="line">dbpath=/usr/local/var/db/mongodb</span><br><span class="line"><span class="comment"># 日志输出文件路径</span></span><br><span class="line">logpath=/usr/local/var/log/mongodb.log</span><br><span class="line"><span class="comment"># 错误日志采用追加模式</span></span><br><span class="line">logappend=<span class="literal">true</span></span><br><span class="line"><span class="comment"># 启用日志文件，默认启用</span></span><br><span class="line">journal=<span class="literal">true</span></span><br><span class="line"><span class="comment"># 这个选项可以过滤掉一些无用的日志信息，若需要调试使用请设置为false</span></span><br><span class="line">quiet=<span class="literal">true</span></span><br><span class="line"><span class="comment"># 端口号 默认为27017</span></span><br><span class="line">port=27017</span><br><span class="line"><span class="comment"># 允许远程访问</span></span><br><span class="line"><span class="comment"># bind_ip=0.0.0.0</span></span><br><span class="line"><span class="comment"># 开启子进程</span></span><br><span class="line">fork=<span class="literal">true</span></span><br><span class="line"><span class="comment"># 开启认证，必选先添加用户，先不开启（不用验证账号密码）</span></span><br><span class="line"><span class="comment"># auth=true</span></span><br></pre></td></tr></table></figure></li><li>直接设置配置文件启动<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongod --config /usr/local/etc/mongodb.conf</span><br></pre></td></tr></table></figure></li><li>另外开启新的终端，输入 mongo 命令进入 MongoDB 数据库</li><li>正常退出数据库(mongo 执行命令的终端窗口)<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(1) use admin</span><br><span class="line">(2) db.shutdownServer()</span><br><span class="line">(3) control + c</span><br></pre></td></tr></table></figure><h2 id="MongoDB-常用命令"><a href="#MongoDB-常用命令" class="headerlink" title="MongoDB 常用命令"></a>MongoDB 常用命令</h2></li></ul><table><thead><tr><th align="center">命令</th><th align="center">说明</th></tr></thead><tbody><tr><td align="center">db.help()</td><td align="center">查看命令提示</td></tr><tr><td align="center">db</td><td align="center">查看当前所在数据库的名字</td></tr><tr><td align="center">use 数据库名</td><td align="center">表示切换或是创建数据库</td></tr><tr><td align="center">show dbs</td><td align="center">显示有数据的库</td></tr><tr><td align="center">db.stats()</td><td align="center">查看当前数据的状态</td></tr><tr><td align="center">db.version()</td><td align="center">查看 MongoDB 版本</td></tr><tr><td align="center">db.[数据库名].insert()</td><td align="center">插入数据</td></tr><tr><td align="center">db.[数据库名].find()</td><td align="center">查找数据</td></tr></tbody></table>]]></content>
+      
+      
+      <categories>
+          
+          <category> Mac </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MongoDB </tag>
+            
+            <tag> 环境配置 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Mac 平台安装 Homebrew</title>
       <link href="/post/48976.html"/>
       <url>/post/48976.html</url>
@@ -20,24 +78,11 @@
       
         <tags>
             
-            <tag> Homebrew </tag>
-            
             <tag> 环境配置 </tag>
             
+            <tag> Homebrew </tag>
+            
         </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Hello World</title>
-      <link href="/post/16107.html"/>
-      <url>/post/16107.html</url>
-      
-        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
-      
-      
       
     </entry>
     
