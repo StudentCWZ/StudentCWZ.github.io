@@ -4,9 +4,36 @@
   
     
     <entry>
+      <title>Mac 平台安装 Homebrew</title>
+      <link href="/post/48976.html"/>
+      <url>/post/48976.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="brew-安装脚本"><a href="#brew-安装脚本" class="headerlink" title="brew 安装脚本"></a>brew 安装脚本</h2><ul><li>brew 安装脚本(国内源)<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/zsh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)</span>&quot;</span> </span><br></pre></td></tr></table></figure></li><li>傻瓜式安装(建议选择中科大源)</li></ul><h2 id="brew-卸载脚本"><a href="#brew-卸载脚本" class="headerlink" title="brew 卸载脚本"></a>brew 卸载脚本</h2><ul><li>brew 卸载脚本<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/zsh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure></li></ul><h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><ul><li>brew 常用命令</li></ul><table><thead><tr><th align="center">命令</th><th align="center">说明</th></tr></thead><tbody><tr><td align="center">安装软件</td><td align="center">brew install xxx</td></tr><tr><td align="center">卸载软件</td><td align="center">brew uninstall xxx</td></tr><tr><td align="center">搜索软件</td><td align="center">brew search xxx</td></tr><tr><td align="center">更新软件</td><td align="center">brew upgrade xxx</td></tr><tr><td align="center">查看列表</td><td align="center">list</td></tr><tr><td align="center">更新 brew</td><td align="center">brew update</td></tr><tr><td align="center">清理所有包的旧版本</td><td align="center">brew cleanup</td></tr><tr><td align="center">清理指定包的旧版本</td><td align="center">brew cleanup $FORMULA</td></tr><tr><td align="center">查看可清理的旧版本包，不执行实际操作</td><td align="center">brew cleanup -n</td></tr></tbody></table><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul><li><a href="https://www.jianshu.com/p/032ce92e4c7b?utm_campaign=shakespeare">转载: homebrew 安装、卸载、基本操作</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Mac </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Homebrew </tag>
+            
+            <tag> 环境配置 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Hello World</title>
-      <link href="/2022/04/15/hello-world/"/>
-      <url>/2022/04/15/hello-world/</url>
+      <link href="/post/16107.html"/>
+      <url>/post/16107.html</url>
       
         <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
       
