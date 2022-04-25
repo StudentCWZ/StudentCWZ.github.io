@@ -1,3 +1,4 @@
+/*Social 图标颜色*/
 .fa-evernote {
     color: #21a232;
 }
@@ -6,10 +7,7 @@
     color: #7d21a2;
 }
 
-.fa-github {
-    color: #21a297;
-}
-
+/*侧边栏各类图标颜色*/
 .fa-user {
     color: #ff7242;
 }
@@ -38,6 +36,11 @@
     color: rgba(186, 6, 231);
 }
 
+.fa-stream {
+    color: hotpink;
+}
+
+/*顶部栏各类图标颜色*/
 .fa-link {
     color: rgb(34, 218, 241);
 }
@@ -60,4 +63,34 @@
 
 .fa-search {
     color: #6693f4;
+}
+
+/*文章各类小图标颜色*/
+.fa-tag {
+    color: #c3e88d;
+}
+
+.fa-inbox {
+    color: #1bcdfc;
+}
+
+.fa-calendar-alt {
+    color: #f35626;
+}
+
+.fa-file-word {
+    color: #1e5798;
+}
+
+.fa-clock {
+    color: #00c4b6;
+}
+
+.fa-eye {
+    color: red;
+}
+
+/*评论栏颜色*/
+.fa-comments {
+    color: #21a232;
 }
