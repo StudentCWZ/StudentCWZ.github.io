@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>Mac 平台给 Github 配置 SSH</title>
+      <link href="/post/ff91de0c.html"/>
+      <url>/post/ff91de0c.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="配置本地-Git"><a href="#配置本地-Git" class="headerlink" title="配置本地 Git"></a>配置本地 Git</h2><ul><li>打开终端 </li><li>Git 全局设置<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;github 账户名&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;注册 github 所用邮箱&quot;</span></span><br></pre></td></tr></table></figure></li><li>查看配置<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config -l</span><br></pre></td></tr></table></figure></li></ul><h2 id="配置-SSH"><a href="#配置-SSH" class="headerlink" title="配置 SSH"></a>配置 SSH</h2><ul><li><p>主目录下(&#x2F;Users&#x2F;用户名)</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -al</span><br></pre></td></tr></table></figure></li><li><p>如果不存在 .ssh 文件夹，新建</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> .ssh</span><br></pre></td></tr></table></figure></li><li><p>切换文件目录</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> .ssh</span><br></pre></td></tr></table></figure></li><li><p>生成公私钥对</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;注册 github 所用邮箱&quot;</span></span><br></pre></td></tr></table></figure></li><li><p>一路回车，出现如下画面表示成功</p><p><img src="/img/loading.gif" data-original="../../img/posts/mac/ssh_01.png" width = 30% height = 30% /><p></li><li><p>查看公钥</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> id_rsa.pub</span><br></pre></td></tr></table></figure></li><li><p>复制密钥，进入 github ，然后点击 Setting -&gt; SSh and GPG keys -&gt; New SSH key ，将复制 id_rsa.pub 内容粘贴上去即可</p></li><li><p>验证是否成功</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Mac </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 环境配置 </tag>
+            
+            <tag> Github </tag>
+            
+            <tag> SSH </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>两数之和</title>
       <link href="/post/d98ef1d2.html"/>
       <url>/post/d98ef1d2.html</url>
