@@ -4,11 +4,40 @@
   
     
     <entry>
+      <title>Mac 使用 iTerm2 进行远程服务器文件的上传下载</title>
+      <link href="/post/67502ae4.html"/>
+      <url>/post/67502ae4.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol><li>在 Windows 下面使用 xShell 时，经常使用 sz 命令进行文件的上传下载非常方便。</li><li>在 Mac 下面就不能直接使用了，需要进行配置才能使用这么方便的功能。</li></ol><h2 id="安装-lrzsz"><a href="#安装-lrzsz" class="headerlink" title="安装 lrzsz"></a>安装 lrzsz</h2><ul><li>安装 lrzsz<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install lrzsz</span><br></pre></td></tr></table></figure></li><li>安装完成后检查是否存在<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -alh /usr/local/bin/sz</span><br></pre></td></tr></table></figure></li><li>lrzsz 是对 zmodem 协议实现的软件包</li></ul><h2 id="配置-iTerm2-属性"><a href="#配置-iTerm2-属性" class="headerlink" title="配置 iTerm2 属性"></a>配置 iTerm2 属性</h2><ul><li><p>拉取<a href="https://gitcode.net/mirrors/mmastrac/iterm2-zmodem?utm_source=csdn_github_accelerator">相关仓库</a> </p></li><li><p>上面仓库主要文件如下： </p><ul><li>iterm2-recv-zmodem.sh </li><li>iterm2-send-zmodem.sh</li></ul></li><li><p>将两个脚本 copy 到 &#x2F;usr&#x2F;local&#x2F;bin&#x2F; 文件夹下面 </p></li><li><p>设置一下两个脚本的权限，一般 chmod 777 就行了</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">chmod</span> 777 /usr/local/bin/iterm2-*</span><br></pre></td></tr></table></figure></li><li><p>设置 iterm2 的 Tirgger 特性， profiles -&gt; default -&gt; editProfiles -&gt; Advanced 中的 Tirgger</p></li><li><p>添加两条 trigger，分别设置 Regular expression，Action，Parameters，Instant 如下：</p><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">1.第一条</span><br><span class="line">        Regular expression: rz waiting to receive.\*\*B0100</span><br><span class="line">        Action: Run Silent Coprocess</span><br><span class="line">        Parameters: /usr/local/bin/iterm2-send-zmodem.sh</span><br><span class="line">        Instant: checked</span><br><span class="line">2.第二条</span><br><span class="line">        Regular expression: \*\*B00000000000000</span><br><span class="line">        Action: Run Silent Coprocess</span><br><span class="line">        Parameters: /usr/local/bin/iterm2-recv-zmodem.sh</span><br><span class="line">        Instant: checked</span><br></pre></td></tr></table></figure></li><li><p>添加过程如下：</p><p><img src="/img/loading.gif" data-original="../../img/posts/mac/lrzsz_01.png" width = 98% height = 100% /><p></li></ul><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul><li><a href="https://blog.csdn.net/weixin_34067980/article/details/91773253">iTerm2 使用 zmodem 协议上传下载文件</a></li><li><a href="https://blog.csdn.net/weixin_34115824/article/details/88036529">在 Mac 上使用 iTerm2 进行 sz 和 rz 命令进行远程服务器文件的上传下载功能</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Mac </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> iterm2 </tag>
+            
+            <tag> lrzsz </tag>
+            
+            <tag> 环境配置 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Mac 平台安装 MySQL</title>
       <link href="/post/59e50a26.html"/>
       <url>/post/59e50a26.html</url>
       
-        <content type="html"><![CDATA[<h2 id="下载-mysql"><a href="#下载-mysql" class="headerlink" title="下载 mysql"></a>下载 mysql</h2><ul><li><a href="https://dev.mysql.com/downloads/mysql/">官方网站</a></li></ul><p><img src="/img/loading.gif" data-original="../../img/posts/mac/mysql_01.png" width = 50% height = 50% /><p><ul><li>双击打开下载的 mysql-8.0.22-macos10.15-x86_64.dmg 安装包</li></ul><p><img src="/img/loading.gif" data-original="../../img/posts/mac/mysql_02.png" width = 50% height = 50% /><p><ul><li>一路点击继续，直到以下画面</li></ul><p><img src="/img/loading.gif" data-original="../../img/posts/mac/mysql_03.png" width = 50% height = 50% /><p><ul><li>选择 Use Legacy Password Encryption</li><li>此处需要你设置一个密码，记住这个密码是你日后登录 mysql 的密码</li></ul><p><img src="/img/loading.gif" data-original="../../img/posts/mac/mysql_04.png" width = 50% height = 50% /><p><ul><li>完成之后，打开系统偏好设置，会发现下面多出了 mysql 的小图标 </li><li>双击打开 mysql 的小图标 </li><li>如果显示 Start MySQL Server，表示现在是停止运行的，点击按钮即可运行 mysql</li><li>如果显示显示 Stop MySQL Server，表示现在是正在运行的，点击按钮即可停止 mysql</li></ul><h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><ul><li>修改 .zshrc 文件<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.zshrc</span><br></pre></td></tr></table></figure></li><li>添加环境变量<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Path to your mysql installation.</span><br><span class="line">export PATH=$PATH:/usr/local/mysql/bin</span><br></pre></td></tr></table></figure></li><li>使更改立即生效<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.zshrc</span><br></pre></td></tr></table></figure></li></ul><h2 id="登录-mysql"><a href="#登录-mysql" class="headerlink" title="登录 mysql"></a>登录 mysql</h2><ul><li>登录 mysql<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p</span><br></pre></td></tr></table></figure></li><li>输入密码，即可进入 mysql 数据库操作</li></ul><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul><li><a href="https://blog.csdn.net/mirajay_yeah/article/details/110388507">转载: Mac 安装 mysql (极简)</a></li></ul>]]></content>
+        <content type="html"><![CDATA[<h2 id="下载-mysql"><a href="#下载-mysql" class="headerlink" title="下载 mysql"></a>下载 mysql</h2><ul><li><a href="https://dev.mysql.com/downloads/mysql/">官方网站</a></li></ul><p><img src="/img/loading.gif" data-original="../../img/posts/mac/mysql_01.png" width = 90% height = 100% /><p><ul><li>双击打开下载的 mysql-8.0.22-macos10.15-x86_64.dmg 安装包</li></ul><p><img src="/img/loading.gif" data-original="../../img/posts/mac/mysql_02.png" width = 90% height = 100% /><p><ul><li>一路点击继续，直到以下画面</li></ul><p><img src="/img/loading.gif" data-original="../../img/posts/mac/mysql_03.png" width = 90% height = 100% /><p><ul><li>选择 Use Legacy Password Encryption</li><li>此处需要你设置一个密码，记住这个密码是你日后登录 mysql 的密码</li></ul><p><img src="/img/loading.gif" data-original="../../img/posts/mac/mysql_04.png" width = 90% height = 100% /><p><ul><li>完成之后，打开系统偏好设置，会发现下面多出了 mysql 的小图标 </li><li>双击打开 mysql 的小图标 </li><li>如果显示 Start MySQL Server，表示现在是停止运行的，点击按钮即可运行 mysql</li><li>如果显示显示 Stop MySQL Server，表示现在是正在运行的，点击按钮即可停止 mysql</li></ul><h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><ul><li>修改 .zshrc 文件<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.zshrc</span><br></pre></td></tr></table></figure></li><li>添加环境变量<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Path to your mysql installation.</span><br><span class="line">export PATH=$PATH:/usr/local/mysql/bin</span><br></pre></td></tr></table></figure></li><li>使更改立即生效<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.zshrc</span><br></pre></td></tr></table></figure></li></ul><h2 id="登录-mysql"><a href="#登录-mysql" class="headerlink" title="登录 mysql"></a>登录 mysql</h2><ul><li>登录 mysql<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p</span><br></pre></td></tr></table></figure></li><li>输入密码，即可进入 mysql 数据库操作</li></ul><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul><li><a href="https://blog.csdn.net/mirajay_yeah/article/details/110388507">转载: Mac 安装 mysql (极简)</a></li></ul>]]></content>
       
       
       <categories>
@@ -101,9 +130,9 @@
       
         <tags>
             
-            <tag> Java </tag>
-            
             <tag> 环境配置 </tag>
+            
+            <tag> Java </tag>
             
         </tags>
       
