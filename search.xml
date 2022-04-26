@@ -4,6 +4,60 @@
   
     
     <entry>
+      <title>Mac 平台安装 Go 环境</title>
+      <link href="/post/67a9606f.html"/>
+      <url>/post/67a9606f.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="下载安装包"><a href="#下载安装包" class="headerlink" title="下载安装包"></a>下载安装包</h2><ul><li><a href="https://go.dev/dl/">官方源下载</a> </li><li><a href="https://studygolang.com/dl">国内源下载</a></li><li>直接下一步安装即可</li></ul><h2 id="GO111MODULE-设置"><a href="#GO111MODULE-设置" class="headerlink" title="GO111MODULE 设置"></a>GO111MODULE 设置</h2><ul><li>设置 GO111MODULE<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">go <span class="built_in">env</span> -w GOPROXY=https://goproxy.cn,direct</span><br><span class="line">go <span class="built_in">env</span> -w GO111MODULE=on</span><br></pre></td></tr></table></figure></li></ul><h2 id="配置-GOPATH"><a href="#配置-GOPATH" class="headerlink" title="配置 GOPATH"></a>配置 GOPATH</h2><ul><li>查看具体信息<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go <span class="built_in">env</span></span><br></pre></td></tr></table></figure></li><li>在用户目录(&#x2F;Users&#x2F;mac)下，新建 go 目录，再在下面建立 bin pkg src 文件夹</li><li>修改 .zshrc 文件，添加环境变量<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(1) vim ~/.zshrc</span><br><span class="line">(2) 添加</span><br><span class="line">export GOPATH=/Users/用户名/go</span><br><span class="line">(3) 使更改立即生效</span><br><span class="line">source ~/.zshrc</span><br></pre></td></tr></table></figure></li></ul><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul><li><a href="https://www.jianshu.com/p/082549479701">mac 安装 go 语言</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Mac </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 环境配置 </tag>
+            
+            <tag> Golang </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Mac 平台 java 开发环境搭建教程</title>
+      <link href="/post/87aba1ef.html"/>
+      <url>/post/87aba1ef.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="查看是否安装"><a href="#查看是否安装" class="headerlink" title="查看是否安装"></a>查看是否安装</h2><ul><li>在安装 JDK 之前，先查看下自己电脑是否已经安装了 JDK</li><li>打开终端，输入 java –version 并回车<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">java 17.0.1 2021-10-19 LTS</span><br><span class="line">Java(TM) SE Runtime Environment (build 17.0.1+12-LTS-39)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 17.0.1+12-LTS-39, mixed mode, sharing)</span><br></pre></td></tr></table></figure></li><li>从上图中可以看出我们已安装了 JDK 17</li><li>如果这个版本是你需要的版本，可直接看如何配置 Java 开发环境</li></ul><h2 id="安装-Java"><a href="#安装-Java" class="headerlink" title="安装 Java"></a>安装 Java</h2><ul><li><a href="https://www.oracle.com/java/technologies/downloads/">官网下载</a></li><li>JDK 安装</li><li>MAC 系统 JDK 安装是很简单的，一路下一步就 ok 了</li></ul><h2 id="配置-Java-开发环境"><a href="#配置-Java-开发环境" class="headerlink" title="配置 Java 开发环境"></a>配置 Java 开发环境</h2><ul><li>MAC 默认安装目录为 &#x2F;Library&#x2F;Java&#x2F;JavaVirtualMachines&#x2F;</li><li>编辑 ～&#x2F;.zshrc 文件，添加环境变量(前提：事先装了 oh-my-zsh)</li></ul><p><img src="/img/loading.gif" data-original="../../img/posts/mac/java_01.png" width = 100% height = 100% /><p><ul><li>使更改立即生效<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.zshrc</span><br></pre></td></tr></table></figure></li></ul><h2 id="测试脚本"><a href="#测试脚本" class="headerlink" title="测试脚本"></a>测试脚本</h2><ul><li>可以用文本编辑器写程序，保存为后缀为 Test.java 的 Java 文件，进行程序测试<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span> <span class="params">(String args[])</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello, java!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ul><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul><li><a href="https://www.cnblogs.com/wyaokai/p/12520494.html">MAC 系统 java 开发环境搭建教程</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Mac </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+            <tag> 环境配置 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Mac 平台给 Github 配置 SSH</title>
       <link href="/post/ff91de0c.html"/>
       <url>/post/ff91de0c.html</url>
@@ -107,9 +161,9 @@
       
         <tags>
             
-            <tag> MongoDB </tag>
-            
             <tag> 环境配置 </tag>
+            
+            <tag> MongoDB </tag>
             
         </tags>
       
