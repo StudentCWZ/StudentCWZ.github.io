@@ -1,0 +1,815 @@
+<!DOCTYPE html><html lang="zh_TW" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>第四章 操作文件与目录 | StudentCWZ 个人博客</title><meta name="keywords" content="Linux"><meta name="author" content="StudentCWZ,330459539@qq.com"><meta name="copyright" content="StudentCWZ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="第四章 操作文件与目录前言 本章将介绍如下命令：   cp: 复制文件和目录  mv: 移动或重命名文件和目录  mkdir: 创建目录  rm: 移除文件和目录  ln: 创建硬链接和符号连接   以上 5 个命令属于最常使用 Linux 命令之列，可用来操作文件与目录。 坦率地说，使用图形文件管理器来执行一些由这些命令执行的任务要容易多。使用文件管理器，我们可以将文件从一个目录拖放到另一个目录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第四章 操作文件与目录">
+<meta property="og:url" content="https://studentcwz.github.io/post/4ad1077e.html">
+<meta property="og:site_name" content="StudentCWZ 个人博客">
+<meta property="og:description" content="第四章 操作文件与目录前言 本章将介绍如下命令：   cp: 复制文件和目录  mv: 移动或重命名文件和目录  mkdir: 创建目录  rm: 移除文件和目录  ln: 创建硬链接和符号连接   以上 5 个命令属于最常使用 Linux 命令之列，可用来操作文件与目录。 坦率地说，使用图形文件管理器来执行一些由这些命令执行的任务要容易多。使用文件管理器，我们可以将文件从一个目录拖放到另一个目录">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://studentcwz.github.io/img/linux.jpeg">
+<meta property="article:published_time" content="2022-04-27T03:06:29.007Z">
+<meta property="article:modified_time" content="2022-04-27T05:50:48.278Z">
+<meta property="article:author" content="StudentCWZ">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://studentcwz.github.io/img/linux.jpeg"><link rel="shortcut icon" href="/img/favicon.jpeg"><link rel="canonical" href="https://studentcwz.github.io/post/4ad1077e"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '第四章 操作文件与目录',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-04-27 13:50:48'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 6 || hour >= 18
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/static-butterfly/dist/css/index.min.css"><link rel="stylesheet" href="/css/scroll.css"><link rel="stylesheet" href="/css/macblack.css"><link rel="stylesheet" href="/css/card.css"><link rel="stylesheet" href="/css/tag.css"><link rel="stylesheet" href="/css/mouse.css"><link rel="stylesheet" href="/css/footer.css"><link rel="stylesheet" href="/css/fonts.css"><link rel="stylesheet" href="/css/icons.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><link rel="stylesheet" href="/css/clock.min.css" /><link rel="stylesheet" href="/css/runtime.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">30</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">18</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/guide/"><i class="fa-fw fas fa-gift"></i><span> Guide</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/artitalk/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> Speak</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fa-fw fa fa-paper-plane"></i><span> Message</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/linux.jpeg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">StudentCWZ 个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/guide/"><i class="fa-fw fas fa-gift"></i><span> Guide</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/artitalk/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> Speak</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fa-fw fa fa-paper-plane"></i><span> Message</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">第四章 操作文件与目录</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-04-27T03:06:29.007Z" title="Created 2022-04-27 11:06:29">2022-04-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-04-27T05:50:48.278Z" title="Updated 2022-04-27 13:50:48">2022-04-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">4.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>16min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="第四章 操作文件与目录"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="第四章-操作文件与目录"><a href="#第四章-操作文件与目录" class="headerlink" title="第四章 操作文件与目录"></a>第四章 操作文件与目录</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li>本章将介绍如下命令：</li>
+</ol>
+<ul>
+<li>cp: 复制文件和目录 </li>
+<li>mv: 移动或重命名文件和目录 </li>
+<li>mkdir: 创建目录 </li>
+<li>rm: 移除文件和目录 </li>
+<li>ln: 创建硬链接和符号连接</li>
+</ul>
+<ol start="2">
+<li>以上 5 个命令属于最常使用 Linux 命令之列，可用来操作文件与目录。</li>
+<li>坦率地说，使用图形文件管理器来执行一些由这些命令执行的任务要容易多。使用文件管理器，我们可以将文件从一个目录拖放到另一个目录，我们可以剪切和粘贴文件，我们可以删除文件。</li>
+<li>使用命令行程序的原因是其具有强大的功能和灵活的操作。</li>
+<li>虽然使用图形文件管理器能轻松实现简单的文件操作，但是对于复杂的任务，使用命令行程序更容易完成。</li>
+<li>例如，将所有 HTML 文件从一个目录复制到目标目录，要完成这个任务，使用文件管理器则相当困难，而使用命令行则很容易。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> -u *.html destination</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a>通配符</h2><ol>
+<li>基本介绍</li>
+</ol>
+<ul>
+<li>在开始使用命令之前，我们需要介绍一个使命令行如此强大的 shell 特性</li>
+<li>由于 shell 需要经常使用文件名，因此它提供了一些特殊字符来帮助你快速指定一组文件名，这些特殊字符称为通配符</li>
+<li>通配符 (也叫文件名替换) 允许用户依据字符模式选择文件名</li>
+<li>通配符的使用使得为文件名构建复杂的筛选标准成为可能</li>
+</ul>
+<ol start="2">
+<li>通配符以及它们所选择的对象</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">通配符</th>
+<th align="center">匹配项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">*</td>
+<td align="center">匹配任意多个字符(包括 0 个和 1 个)</td>
+</tr>
+<tr>
+<td align="center">?</td>
+<td align="center">匹配任意单个字符(不包括 0 个)</td>
+</tr>
+<tr>
+<td align="center">[characters]</td>
+<td align="center">匹配任意一个属于字符集中的字符</td>
+</tr>
+<tr>
+<td align="center">[!characters]</td>
+<td align="center">匹配任意一个不属于字符集中的字符</td>
+</tr>
+<tr>
+<td align="center">[[:class:]]</td>
+<td align="center">匹配任意一个属于指定字符类中的字符</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>通配符的字符类</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">字符类</th>
+<th align="center">匹配项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">[:alnum:]</td>
+<td align="center">匹配任意一个字符或数字</td>
+</tr>
+<tr>
+<td align="center">[:alpha:]</td>
+<td align="center">匹配任意一个字母</td>
+</tr>
+<tr>
+<td align="center">[:digit:]</td>
+<td align="center">匹配任意一个数字</td>
+</tr>
+<tr>
+<td align="center">[:lower:]</td>
+<td align="center">匹配任意一个小写字母</td>
+</tr>
+<tr>
+<td align="center">[:upper:]</td>
+<td align="center">匹配任意一个大写字母</td>
+</tr>
+</tbody></table>
+<ol start="4">
+<li>通配符模式及其匹配内容</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">形式</th>
+<th align="center">匹配项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">g*</td>
+<td align="center">以 g 开头的任一文件</td>
+</tr>
+<tr>
+<td align="center">b*.txt</td>
+<td align="center">以 b 开头，中间有任意多个字符，并以 .txt 结尾的任一文件</td>
+</tr>
+<tr>
+<td align="center">Data???</td>
+<td align="center">以 Data 开头，后面跟三个字符的任一文件</td>
+</tr>
+<tr>
+<td align="center">[abc]*</td>
+<td align="center">以 abc 中任一开头的任一文件</td>
+</tr>
+<tr>
+<td align="center">BACKUP.[0-9][0-9][0-9]</td>
+<td align="center">以 BACKUP. 开头，后面紧跟 3 个数字的任一文件</td>
+</tr>
+<tr>
+<td align="center">[[:upper:]]*</td>
+<td align="center">以大学字母开头的任一文件</td>
+</tr>
+<tr>
+<td align="center">[![:digit:]]</td>
+<td align="center">不以数字开头的任一文件</td>
+</tr>
+<tr>
+<td align="center">*[[:lower:123]]</td>
+<td align="center">以小写字母或数字 1、2、3 中的任一结尾的文件</td>
+</tr>
+</tbody></table>
+<h2 id="mkdir-创建目录"><a href="#mkdir-创建目录" class="headerlink" title="mkdir - 创建目录"></a>mkdir - 创建目录</h2><ol>
+<li>mkdir 基本介绍</li>
+</ol>
+<ul>
+<li>mkdir 命令是是用来创建目录的，格式如下：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> directory...</span><br></pre></td></tr></table></figure></li>
+<li>创建单个 dir1 目录，输入：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> dir1</span><br></pre></td></tr></table></figure></li>
+<li>输入以下命令可以创建 3 个目录：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> dir1 dir2 dir3</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="cp-复制文件和目录"><a href="#cp-复制文件和目录" class="headerlink" title="cp - 复制文件和目录"></a>cp - 复制文件和目录</h2><ol>
+<li>cp 基本介绍</li>
+</ol>
+<ul>
+<li>cp 文件用来复制文件和目录，它有两种不同的使用方式。 </li>
+<li>将单个文件或目录 item1 复制到文件或目录 item2 中。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> item1 item2</span><br></pre></td></tr></table></figure></li>
+<li>将多个项目(文件或目录)复制进一个目录中。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> item... directory</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol start="2">
+<li>cp 命令选项</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">选项</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-a, –archive</td>
+<td align="center">复制文件和目录及其属性，包括所有权和权限。通常来说，复制的文件具有用户所操作文件的默认属性</td>
+</tr>
+<tr>
+<td align="center">-i, –interactive</td>
+<td align="center">在覆盖一个已存在的文件前，提示用户进行确认。如果没有指定该选项，cp 会默认覆盖文件</td>
+</tr>
+<tr>
+<td align="center">-r, –recursive</td>
+<td align="center">递归地复制目录及其内容。复制目录时需要这个选项 (或 -a 选项)</td>
+</tr>
+<tr>
+<td align="center">-u, –update</td>
+<td align="center">当将文件从一个目录复制到另一个目录时，只会复制那些目标目录中不存在的文件或是目标目录相应文件的更新文件</td>
+</tr>
+<tr>
+<td align="center">-v, –verbose</td>
+<td align="center">复制文件时，显示信息性消息 (informative message)</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>cp 命令示例</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">命令</th>
+<th align="center">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">cp file1 file2</td>
+<td align="center">将 file1 复制到 file2 。如果 file2 存在，则会被 file1 的内容覆盖。如果 file2 不存在，则创建 file2</td>
+</tr>
+<tr>
+<td align="center">cp -i file1 file2</td>
+<td align="center">同上，区别在于当 file2 存在时，覆盖之前通知用户确认</td>
+</tr>
+<tr>
+<td align="center">cp file1 file2 dir1</td>
+<td align="center">将 file1 和 file2 复制到目录 dir1 里。dir1 必须已经存在</td>
+</tr>
+<tr>
+<td align="center">cp dir1&#x2F;* dir2</td>
+<td align="center">通过使用通配符，将 dir1 中的所有文件复制到 dir2 中。dir2 必须已经存在</td>
+</tr>
+<tr>
+<td align="center">cp -r dir1 dir2</td>
+<td align="center">将 dir1 目录 (及其内容) 复制到 dir2 目录中。如果 dir2 不存在，创建 dir2 ，且包含与 dir1 目录相同的内容</td>
+</tr>
+</tbody></table>
+<h2 id="mv-移除和重命名文件"><a href="#mv-移除和重命名文件" class="headerlink" title="mv - 移除和重命名文件"></a>mv - 移除和重命名文件</h2><ol>
+<li>mv 基本介绍</li>
+</ol>
+<ul>
+<li>mv 命令可以执行文件移动和文件重命名操作，这具体取决于如何使用它。在这两种情况下，完成操作之后，原来的文件名将不存在</li>
+<li>mv 的使用方法与 cp 基本相似。将文件 (或目录) item1 移动 (或重命名) 为 item2 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mv</span> item1 item2</span><br></pre></td></tr></table></figure></li>
+<li>将一个或多个条目从一个目录移动到另一个目录下<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mv</span> item... directory</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol start="2">
+<li>mv 选项</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">选项</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-i, –interactive</td>
+<td align="center">覆盖一个已存在的文件之前，提示用户确认。如果没有指定该选项，mv 会默认覆盖文件</td>
+</tr>
+<tr>
+<td align="center">-u, –update</td>
+<td align="center">将文件从一个目录移动到另一个目录，只移动那些目标目录中不存在的文件或是目标目录里相应文件的更新文件</td>
+</tr>
+<tr>
+<td align="center">-v, –verbose</td>
+<td align="center">移动文件时显示信息性消息</td>
+</tr>
+</tbody></table>
+<ul>
+<li>mv 示例</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">命令</th>
+<th align="center">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">mv file1 file2</td>
+<td align="center">将 file1 移到 file2 。如果 file2 存在，则会被 file1 的内容覆盖。如果 file2 不存在，则创建 file2 。无论哪一种情况，file1 不再存在</td>
+</tr>
+<tr>
+<td align="center">mv -i file1 file2</td>
+<td align="center">同上，仅当 file2 存在时，覆盖之前通知用户确认</td>
+</tr>
+<tr>
+<td align="center">mv file1 file2 dir1</td>
+<td align="center">将 file1 和 file2 移动目录 dir1 下。dir1 必须已经存在</td>
+</tr>
+<tr>
+<td align="center">mv dir1 dir2</td>
+<td align="center">将目录 dir1 (和其他内容) 移到目录 dir2 下。如果目录 dir2 不存在，创建目录 dir2 ，将目录 dir1 的内容移到 dir2 下，同时删除目录 dir1</td>
+</tr>
+</tbody></table>
+<h2 id="rm-删除文件和目录"><a href="#rm-删除文件和目录" class="headerlink" title="rm - 删除文件和目录"></a>rm - 删除文件和目录</h2><ol>
+<li>rm 基本介绍</li>
+</ol>
+<ul>
+<li>rm 命令用来移除 (删除文件) 和目录，如下所示。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> item ...</span><br></pre></td></tr></table></figure></li>
+<li>其中 item 是一个或多个文件 (或目录) 的名称。</li>
+</ul>
+<ol start="2">
+<li>rm 常用选项</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">选项</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-i, –interactive</td>
+<td align="center">删除一个已经存在的文件前，提示用户确认。如果没有指定这个选项，rm 命令会默认删除文件</td>
+</tr>
+<tr>
+<td align="center">-r, –recursive</td>
+<td align="center">递归地删除目录。也就是说，如果删除的目录有子目录的话，也要将其删除。要删除一个目录，则必须指定该选项</td>
+</tr>
+<tr>
+<td align="center">-f, –force</td>
+<td align="center">忽略不存在的文件并无需提示确认。该选项会覆盖 –interactive</td>
+</tr>
+<tr>
+<td align="center">-v, –verbose</td>
+<td align="center">删除文件时显示信息性消息</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>rm 常用实例</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">命令</th>
+<th align="center">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">rm file1</td>
+<td align="center">在不提示用户的情况下，删除 file1</td>
+</tr>
+<tr>
+<td align="center">rm -i file1</td>
+<td align="center">删除 file1 前，提示用户确认</td>
+</tr>
+<tr>
+<td align="center">rm -r file1 dir1</td>
+<td align="center">删除 file1、dir1 以及它们的内容</td>
+</tr>
+<tr>
+<td align="center">rm -rf file1 dir1</td>
+<td align="center">同上，当在 file1 或 dir1 不存在时，rm 仍会继续执行，且不提示用户</td>
+</tr>
+</tbody></table>
+<h2 id="ln-创建链接"><a href="#ln-创建链接" class="headerlink" title="ln - 创建链接"></a>ln - 创建链接</h2><ol>
+<li>ln 概述</li>
+</ol>
+<ul>
+<li>ln 命令可用来创建硬链接或是符号链接。它的使用方式有两种：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建硬链接</span></span><br><span class="line"><span class="built_in">ln</span> file <span class="built_in">link</span></span><br><span class="line"><span class="comment"># 创建符号链接</span></span><br><span class="line"><span class="built_in">ln</span> -s item <span class="built_in">link</span>   <span class="comment"># 这里的 item 可以是文件也可以是目录。</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol start="2">
+<li>硬链接</li>
+</ol>
+<ul>
+<li>硬链接是最初 UNIX 用来创建链接的方式，符号链接较之更为先进。</li>
+<li>默认情况下，每个文件有一个硬链接，该硬链接会给文件起名字。当创建一个硬链接的时候，也为这个文件创建了一个额外的目录条目。</li>
+<li>硬链接有两条重要的局限性：<ul>
+<li>硬链接不能引用自身文件系统之外的文件</li>
+<li>硬链接无法引用目录</li>
+</ul>
+</li>
+<li>硬链接和文件本身没有什么区别。与包含符号链接的目录列表不同，包含硬链接的目录列表没有特别的链接指示说明。</li>
+<li>当硬链接被删除时，只是删除了这个链接，但是文件本身的内容依然存在 (也就是说，该空间没有释放) ，除非该文件的所有链接都被删除了。</li>
+</ul>
+<ol start="3">
+<li>符号链接</li>
+</ol>
+<ul>
+<li>符号链接是为了克服硬链接的局限性而创建的。</li>
+<li>符号链接是通过创建一个特殊类型的文件来起作用的，该文件包含了指向引用文件或目录的文本指针</li>
+<li>符号链接指向的文件与符号链接自身几乎没有区别</li>
+<li>当删除一个符号链接时，删除的只是符号链接而没有删除文件本身</li>
+<li>如果先于符号链接之前删除文件，那么这个链接依然存在，但却不指向任何文件。此时这个链接称为坏链接</li>
+</ul>
+<h2 id="实战演练"><a href="#实战演练" class="headerlink" title="实战演练"></a>实战演练</h2><ol>
+<li>概述</li>
+</ol>
+<ul>
+<li>由于我们要做一些实际的文件操作，我们先来创建一个安全的地带，来执行文件操作命令</li>
+<li>首先，我们需要一个工作目录。我们在主目录里创建一个目录并命名为 playground</li>
+</ul>
+<ol start="2">
+<li>创建目录</li>
+</ol>
+<ul>
+<li>mkdir 命令用来创建一个目录。为了创建 playground 目录，我们首先要保证当前目录是主目录，然后再创建新目录<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ <span class="built_in">cd</span></span><br><span class="line">[me@linuxbox ~]$ <span class="built_in">mkdir</span> playground</span><br></pre></td></tr></table></figure></li>
+<li>在 playground 目录中新建两个目录，命名为 dir1 、 dir2</li>
+<li>切换工作目录为 playground ，然后再次执行 mkdir 命令<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ <span class="built_in">cd</span> playground</span><br><span class="line">[me@linuxbox playground]$ <span class="built_in">mkdir</span> dir1 dir2</span><br></pre></td></tr></table></figure></li>
+<li>需要注意的是， mkdir 命令可以接受多个参数，从而允许我们用一个命令创建两个目录</li>
+</ul>
+<ol start="3">
+<li>复制文件</li>
+</ol>
+<ul>
+<li>接下来，让我们在创建的目录中放入一些数据，这一过程可以通过文件复制来完成</li>
+<li>通过使用 cp 命令，我们可以将 &#x2F;etc 目录中的 passwd 文件复制到当前工作目录里<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">cp</span> /etc/passwd .</span><br></pre></td></tr></table></figure></li>
+<li>如果我们此时执行 ls 命令，将会看到我们的文件<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">ls</span> -l</span><br><span class="line">total 12</span><br><span class="line">drwxrwxr-x 2 me me 4096 2012-01-10 16:40 dir1</span><br><span class="line">drwxrwxr-x 2 me me 4096 2012-01-10 16:40 dir2</span><br><span class="line">-rw-r--r-- 1 me me 1650 2012-01-10 16:07 passwd</span><br></pre></td></tr></table></figure></li>
+<li>现在让我们使用 -v 选项，重复操作复制命令，来看看结果如何<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">cp</span> -v /etc/passwd .</span><br><span class="line"><span class="string">&#x27;/etc/passwd&#x27;</span> -&gt; <span class="string">&#x27;.passwd&#x27;</span></span><br></pre></td></tr></table></figure></li>
+<li>cp 命令再次执行复制操作，但是，这一次显示了一条简洁的信息来指明它正在执行什么操作。</li>
+<li>需要注意的是，在没有任何警告的情况下，cp 命令覆盖了第一次的复制内容。</li>
+<li>cp 命令会假定用户清楚自己当前的操作，加上 -i 选项可以获得警告信息。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">cp</span> -i /etc/passwd .</span><br><span class="line"><span class="built_in">cp</span>: overwrite <span class="string">&#x27;./passwd&#x27;</span>?</span><br></pre></td></tr></table></figure></li>
+<li>通过在提示符下输入 y ，文件就会被重写；任何其他的字符会使 cp 命令保留该文件。</li>
+</ul>
+<ol start="4">
+<li>移动和重命名文件</li>
+</ol>
+<ul>
+<li>现在，passwd 这个名字似乎没有那么有趣，而我们毕竟是在进行实战演练，因此我们给它改个名字。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">mv</span> passwd fun</span><br></pre></td></tr></table></figure></li>
+<li>现在传送 fun 文件，这是通过将重命名的文件移动到各个目录，然后再移动回当前目录来实现的。<ul>
+<li>首先移到目录 dir1 下，然后：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">mv</span> fun dir1</span><br></pre></td></tr></table></figure></li>
+<li>将文件从目录 dir1 移到 dir2 ，然后：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">mv</span> dir1/fun dir2</span><br></pre></td></tr></table></figure></li>
+<li>再将文件 fun 重新移到当前工作目录下<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">mv</span> dir2/fun .</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>下面来看 mv 命令的效果。首先，再次将数据文件移到目录 dir1<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">mv</span> fun dir1</span><br></pre></td></tr></table></figure></li>
+<li>然后将目录 dir1 移到 dir2 并且使用 ls 命令确认<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">mv</span> dir1 dir2</span><br><span class="line">[me@linuxbox playground]$ <span class="built_in">ls</span> -l dir2</span><br><span class="line">total 4</span><br><span class="line">drwxrwxr-x 2 me me 4096 2012-01-11 06:06 dir1</span><br><span class="line">[me@linuxbox playground]$ <span class="built_in">ls</span> -l dir2/dir1</span><br><span class="line">total 4</span><br><span class="line">-rw-r--r-- 1 me me 1650 2012-01-10 16:33 fun</span><br></pre></td></tr></table></figure></li>
+<li>注意，因为目录 dir2 已经存在，mv 命令将目录 dir1 移到 dir2</li>
+<li>如果 dir2 不存在，mv 将 dir1 重命名为 dir2 。最后，我们将所有东西放回原处<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">mv</span> dir2/dir1 .</span><br><span class="line">[me@linuxbox playground]$ <span class="built_in">mv</span> dir1/fun .</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol start="5">
+<li>创建硬链接</li>
+</ol>
+<ul>
+<li><p>现在，我们试着创建一些链接。首先是创建硬链接，我们先按照如下方式创建一些指向数据文件的链接：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">ln</span> fun fun-hard</span><br><span class="line">[me@linuxbox playground]$ <span class="built_in">ln</span> fun dir1/fun-hard</span><br><span class="line">[me@linuxbox playground]$ <span class="built_in">ln</span> fun dir2/fun-hard</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>目前有 4 个文件 fun 的实例。来看一下 playground 目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">ls</span> -l</span><br><span class="line">total 16</span><br><span class="line">drwxrwxr-x 2 me me 4096 2012-01-14 16:17 dir1</span><br><span class="line">drwxrwxr-x 2 me me 4096 2012-01-14 16:17 dir2</span><br><span class="line">-rw-r--r-- 4 me me 1650 2012-01-10 16:33 fun</span><br><span class="line">-rw-r--r-- 4 me me 1650 2012-01-10 16:33 fun-hard</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以注意到，在列表中，文件 fun 和 fun-hard 的第二个字段都是 4 ，这是文件 fun 存在的硬链接数目</p>
+</li>
+<li><p>由于文件名是由链接创建的，所以一个文件通常至少有一个链接。</p>
+</li>
+<li><p>提到硬链接时，可以想象文件是由两部分组成的，即包含文件内容的数据部分和包含文件名的名称部分。创建硬链接时，实际上是创建了额外的名称，这些名称都指向同一数据部分</p>
+</li>
+<li><p>系统分配了一系列的盘块给所谓的索引节点 (inode) ，该节点随后与文件名称部分建立关联。因此，每个硬链接都指向包含文件内容的具体索引节点</p>
+</li>
+<li><p>ls 命令有一种显示上述信息的方法。它是通过在命令中加上 -i 选项来实现的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">ls</span> -li</span><br><span class="line">total 16</span><br><span class="line">12353539 drwxrwxr-x 2 me me 4096 2012-01-14 16:17 dir1</span><br><span class="line">12353540 drwxrwxr-x 2 me me 4096 2012-01-14 16:17 dir2</span><br><span class="line">12353538 -rw-r--r-- 4 me me 1650 2012-01-10 16:33 fun</span><br><span class="line">12353538 -rw-r--r-- 4 me me 1650 2012-01-10 16:33 fun-hard</span><br></pre></td></tr></table></figure></li>
+<li><p>在上面列表中，第一个字段就是索引节点号，可以看到，fun 和 fun-hard 共享同一个索引节点号，这就证实它们是相同的文件。</p>
+</li>
+</ul>
+<ol start="6">
+<li>创建符号链接</li>
+</ol>
+<ul>
+<li>之所以创建符号链接，是为了克服硬链接的两大不足，即硬链接无法跨越物理设备，也无法引用目录，只能引用文件</li>
+<li>符号链接是一种特殊类型的文件，它包含了指向目标文件或目录的文本指针</li>
+<li>创建符号链接与创建硬链接相似，如下所示<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">ln</span> -s fun fun-sym</span><br><span class="line">[me@linuxbox playground]$ <span class="built_in">ln</span> -s ../fun dir1/fun-sym</span><br><span class="line">[me@linuxbox playground]$ <span class="built_in">ln</span> -s ../fun dir2/fun-sym</span><br></pre></td></tr></table></figure></li>
+<li>创建符号链接时，同时也创建一个文本来描述目标文件与符号链接有关联<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">ls</span> -l dir1</span><br><span class="line">total 4</span><br><span class="line">-rw-r--r-- 4 me me 1650 2012-01-10 16:33 fun-hard</span><br><span class="line">lrwxrwxrwx 1 me me 6 2012-01-15 15:17 fun-sym -&gt; ../fun</span><br></pre></td></tr></table></figure></li>
+<li>在目录 dir1 中， fun-sym 的列表显示它是一个符号链接，这是通过第 1 个字段中的首字符 1 来确认的，并且它也指 ..&#x2F;fun ，这也是正确的</li>
+<li>相对于 fun-sym 的实际位置，文件 fun 在它的上一级目录。还要注意到，符号链接文件的长度是 6 ，这是 ..&#x2F;fun 字符串中字符的数字，而不是它所指向的文件的长度</li>
+<li>创建符号链接时，可以使用绝对路径名，如下所示：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">ln</span> -s /home/me/playground/fun dir1/fun-sym</span><br></pre></td></tr></table></figure></li>
+<li>也可以使用相对路径，如前面示例所示</li>
+<li>因为相对路径允许包含符号链接的目录被重命名&#x2F;或移动，而且不会破坏链接，因此会更可取一些</li>
+<li>除了普通文件之外，符号链接也可以引用目录<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">ln</span> -s dir1 dir1-sym</span><br><span class="line">[me@linuxbox playground]$ <span class="built_in">ls</span> -l</span><br><span class="line">total 16</span><br><span class="line">drwxrwxr-x 2 me me 4096 2012-01-15 15:17 dir1</span><br><span class="line">lrwxrwxrwx 1 me me 4 2012-01-16 14:45 dir1-sym -&gt; dir1</span><br><span class="line">drwxrwxr-x 2 me me 4096 2012-01-15 15:17 dir2</span><br><span class="line">-rw-r--r-- 4 me me 1650 2012-01-10 16:33 fun</span><br><span class="line">-rw-r--r-- 4 me me 1650 2012-01-10 16:33 fun-hard</span><br><span class="line">lrwxrwxrwx 1 me me 3 2012-01-15 15:15 fun-sym -&gt; fun</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol start="7">
+<li>移除文件和目录</li>
+</ol>
+<ul>
+<li>前面讲到，使用 rm 命令可以删除文件和目录。那么我们就用它来清空 playground 目录</li>
+<li>首先，我们删除目录中的一个硬链接<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">rm</span> fun-hard</span><br><span class="line">[me@linuxbox playground]$ <span class="built_in">ls</span> -l</span><br><span class="line">total 12</span><br><span class="line">drwxrwxr-x 2 me me 4096 2012-01-15 15:17 dir1</span><br><span class="line">lrwxrwxrwx 1 me me 4 2012-01-16 14:45 dir1-sym -&gt; dir1</span><br><span class="line">drwxrwxr-x 2 me me 4096 2012-01-15 15:17 dir2</span><br><span class="line">-rw-r--r-- 3 me me 1650 2012-01-10 16:33 fun</span><br><span class="line">lrwxrwxrwx 1 me me 3 2012-01-15 15:15 fun-sym -&gt; fun</span><br></pre></td></tr></table></figure></li>
+<li>文件 file-hard 被删除了，文件 fun 的连接数相应的也由 4 变成了 3</li>
+<li>接下来，我们删除文件 fun ，我们还会加上 -i 选项，看看执行了哪些操作<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">rm</span> -i fun</span><br><span class="line"><span class="built_in">rm</span>: remove regular file <span class="string">&#x27;fun&#x27;</span>?</span><br></pre></td></tr></table></figure></li>
+<li>在提示符下输入字符 y ，文件就被删除了。现在看一下 ls 命令的输出<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">ls</span> -l</span><br><span class="line">total 8</span><br><span class="line">drwxrwxr-x 2 me me 4096 2012-01-15 15:17 dir1</span><br><span class="line">lrwxrwxrwx 1 me me 4 2012-01-16 14:45 dir1-sym -&gt; dir1</span><br><span class="line">drwxrwxr-x 2 me me 4096 2012-01-15 15:17 dir2</span><br><span class="line">lrwxrwxrwx 1 me me 3 2012-01-15 15:15 fun-sym -&gt; fun</span><br></pre></td></tr></table></figure></li>
+<li>由于 fun-sym -&gt; fun 是一个符号链接，且指向的文件现在已经不存在，所以链接也就被破坏了。</li>
+<li>如果试图调用破坏的链接，将会看到如下情况：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ less fun-sym</span><br><span class="line">fun-sym: No such file or directory</span><br></pre></td></tr></table></figure></li>
+<li>稍微清理一下，删除符号链接<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">rm</span> fun-sym dir1-sym</span><br><span class="line">[me@linuxbox playground]$ <span class="built_in">ls</span> -l</span><br><span class="line">drwxrwxr-x 2 me me 4096 2012-01-15 15:17 dir1</span><br><span class="line">drwxrwxr-x 2 me me 4096 2012-01-15 15:17 dir2</span><br></pre></td></tr></table></figure></li>
+<li>有关于符号链接，需要记住一点，即大部分文件操作是以链接目标为对象的，而非链接本身 </li>
+<li>而 rm 命令是个例外。当删除一个链接的时候，链接本身被删除，但是目标文件依旧存在</li>
+<li>最后，我们需要删除目录 playground 。为此，我们将返回主目录，使用 rm 命令的递归选项 (-r) 来删除 playground 目录以及包括子目录在内的所有内容<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox playground]$ <span class="built_in">cd</span></span><br><span class="line">[me@linuxbox ~]$ <span class="built_in">rm</span> -r playground</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul>
+<li>转载：Linux 命令行大全</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:330459539@qq.com">StudentCWZ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://studentcwz.github.io/post/4ad1077e.html">https://studentcwz.github.io/post/4ad1077e.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a></div><div class="post_share"><div class="social-share" data-image="/img/linux.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/post/2cc576b7.html"><img class="next-cover" src="/img/linux.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">第三章 Linux 基本系统</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/post/37c791b4.html" title="第一章 Shell 是什么"><img class="cover" src="/img/linux.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-27</div><div class="title">第一章 Shell 是什么</div></div></a></div><div><a href="/post/3d3cca4.html" title="第二章 导航.md"><img class="cover" src="/img/linux.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-27</div><div class="title">第二章 导航.md</div></div></a></div><div><a href="/post/2cc576b7.html" title="第三章 Linux 基本系统"><img class="cover" src="/img/linux.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-27</div><div class="title">第三章 Linux 基本系统</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div><div id="comment-switch"><span class="first-comment">Twikoo</span><span class="switch-btn"></span><span class="second-comment">Gitalk</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">StudentCWZ</div><div class="author-info__description">Golang and Python developer, always learning new things.</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">30</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">18</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/StudentCWZ"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://qq.com/" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="https://weixin.qq.com/" target="_blank" title="Wechat"><i class="fab fa-weixin"></i></a><a class="social-icon" href="https://mail.qq.com/" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://www.yinxiang.com/" target="_blank" title="Evernote"><i class="fa-brands fa-evernote"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Welcome to my Blog !</div><timing><div class="twopeople"></div></timing></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E6%93%8D%E4%BD%9C%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">第四章 操作文件与目录</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="toc-number">1.2.</span> <span class="toc-text">通配符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mkdir-%E5%88%9B%E5%BB%BA%E7%9B%AE%E5%BD%95"><span class="toc-number">1.3.</span> <span class="toc-text">mkdir - 创建目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cp-%E5%A4%8D%E5%88%B6%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95"><span class="toc-number">1.4.</span> <span class="toc-text">cp - 复制文件和目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mv-%E7%A7%BB%E9%99%A4%E5%92%8C%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6"><span class="toc-number">1.5.</span> <span class="toc-text">mv - 移除和重命名文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rm-%E5%88%A0%E9%99%A4%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95"><span class="toc-number">1.6.</span> <span class="toc-text">rm - 删除文件和目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ln-%E5%88%9B%E5%BB%BA%E9%93%BE%E6%8E%A5"><span class="toc-number">1.7.</span> <span class="toc-text">ln - 创建链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E6%BC%94%E7%BB%83"><span class="toc-number">1.8.</span> <span class="toc-text">实战演练</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-number">1.9.</span> <span class="toc-text">参考文章</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/4ad1077e.html" title="第四章 操作文件与目录"><img src="/img/linux.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第四章 操作文件与目录"/></a><div class="content"><a class="title" href="/post/4ad1077e.html" title="第四章 操作文件与目录">第四章 操作文件与目录</a><time datetime="2022-04-27T03:06:29.007Z" title="Created 2022-04-27 11:06:29">2022-04-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/2cc576b7.html" title="第三章 Linux 基本系统"><img src="/img/linux.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第三章 Linux 基本系统"/></a><div class="content"><a class="title" href="/post/2cc576b7.html" title="第三章 Linux 基本系统">第三章 Linux 基本系统</a><time datetime="2022-04-27T01:49:26.417Z" title="Created 2022-04-27 09:49:26">2022-04-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/3d3cca4.html" title="第二章 导航.md"><img src="/img/linux.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第二章 导航.md"/></a><div class="content"><a class="title" href="/post/3d3cca4.html" title="第二章 导航.md">第二章 导航.md</a><time datetime="2022-04-27T01:16:52.647Z" title="Created 2022-04-27 09:16:52">2022-04-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/37c791b4.html" title="第一章 Shell 是什么"><img src="/img/linux.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第一章 Shell 是什么"/></a><div class="content"><a class="title" href="/post/37c791b4.html" title="第一章 Shell 是什么">第一章 Shell 是什么</a><time datetime="2022-04-27T00:49:18.786Z" title="Created 2022-04-27 08:49:18">2022-04-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/4c946041.html" title="第十六讲 Git rebase"><img src="/img/git.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第十六讲 Git rebase"/></a><div class="content"><a class="title" href="/post/4c946041.html" title="第十六讲 Git rebase">第十六讲 Git rebase</a><time datetime="2022-04-26T07:19:23.517Z" title="Created 2022-04-26 15:19:23">2022-04-26</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 By StudentCWZ</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Toggle Between Traditional Chinese And Simplified Chinese">繁</button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Local search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (true){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-gilt-psi.vercel.app/',
+      region: 'ap-shanghai',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.vemoji)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-gilt-psi.vercel.app/',
+      region: 'ap-shanghai',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      document.getElementById('twikoo-count').innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script><script>function addGitalkSource () {
+  const ele = document.createElement('link')
+  ele.rel = 'stylesheet'
+  ele.href= 'https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css'
+  document.getElementsByTagName('head')[0].appendChild(ele)
+}
+
+function loadGitalk () {
+  function initGitalk () {
+    var gitalk = new Gitalk(Object.assign({
+      clientID: '339388df88d5b5d67362',
+      clientSecret: 'f7a589f837f79a63fb47efae87c7aca989ed1507',
+      repo: 'blog-comments',
+      owner: 'StudentCWZ',
+      admin: ['StudentCWZ'],
+      id: '7824ead8688651b3de58f8002842f418',
+      updateCountCallback: commentCount
+    },null))
+
+    gitalk.render('gitalk-container')
+  }
+
+  if (typeof Gitalk === 'function') initGitalk()
+  else {
+    addGitalkSource()
+    getScript('https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js').then(initGitalk)
+  }
+}
+
+function commentCount(n){
+  let isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+  if (isCommentCount) {
+    isCommentCount.innerHTML= n
+  }
+}
+
+if ('Twikoo' === 'Gitalk' || !false) {
+  if (false) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+  else loadGitalk()
+} else {
+  function loadOtherComment () {
+    loadGitalk()
+  }
+}</script></div><script src="/js/jquery.min.js"></script><script src="/js/mouse_snow.js" defer></script><script src="/js/sakura.js" defer></script><script src="/js/timing.js" defer></script><script src="https://pv.sohu.com/cityjson?ie=utf-8" defer></script><script src="/js/ip_content.js" defer></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.16/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?StudentCWZ";
+            var git_color =['#ebedf0', '#f1f8ff', '#dbedff', '#c8e1ff', '#79b8ff', '#2188ff', '#0366d6', '#005cc5', '#044289', '#032f62', '#05264c'];
+            var git_user ="StudentCWZ";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style>undefined</style><script data-pjax>function history_calendar_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div>';
+                console.log('已挂载history_calendar')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            history_calendar_injector_config()
+        } </script><script data-pjax  src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script><script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="https://npm.elemecdn.com/hexo-butterfly-clock/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://npm.elemecdn.com/hexo-butterfly-clock/lib/clock.min.js"></script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="workboard"></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title=""><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v3.8.2" title=""><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/runtime.js"></script><!-- hexo injector body_end end --><script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body></html>
