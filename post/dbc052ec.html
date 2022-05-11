@@ -1,0 +1,797 @@
+<!DOCTYPE html><html lang="zh_TW" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>第十七章 文件搜索 | StudentCWZ 个人博客</title><meta name="keywords" content="Linux"><meta name="author" content="StudentCWZ,330459539@qq.com"><meta name="copyright" content="StudentCWZ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="第十七章 文件搜索前言 本章我们主要介绍两个用于在 Linux 系统中搜索文件的工具：   locate: 通过文件名查找文件 find: 在文件系统目录框架中查找文件 xargs: 从标准输入中建立、执行命令行 touch: 更改文件的日期时间 stat: 显示文件或文件系统的状态  locate - 较简单的方式查找文件 locate 命令通过快速搜索数据库，以寻找路径名与给定子字符串相匹配的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第十七章 文件搜索">
+<meta property="og:url" content="https://studentcwz.github.io/post/dbc052ec.html">
+<meta property="og:site_name" content="StudentCWZ 个人博客">
+<meta property="og:description" content="第十七章 文件搜索前言 本章我们主要介绍两个用于在 Linux 系统中搜索文件的工具：   locate: 通过文件名查找文件 find: 在文件系统目录框架中查找文件 xargs: 从标准输入中建立、执行命令行 touch: 更改文件的日期时间 stat: 显示文件或文件系统的状态  locate - 较简单的方式查找文件 locate 命令通过快速搜索数据库，以寻找路径名与给定子字符串相匹配的">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://studentcwz.github.io/img/linux.jpeg">
+<meta property="article:published_time" content="2022-05-05T00:33:30.066Z">
+<meta property="article:modified_time" content="2022-05-05T00:33:30.067Z">
+<meta property="article:author" content="StudentCWZ">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://studentcwz.github.io/img/linux.jpeg"><link rel="shortcut icon" href="/img/favicon.jpeg"><link rel="canonical" href="https://studentcwz.github.io/post/dbc052ec"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '第十七章 文件搜索',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-05-05 08:33:30'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 6 || hour >= 18
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/static-butterfly/dist/css/index.min.css"><link rel="stylesheet" href="/css/scroll.css"><link rel="stylesheet" href="/css/macblack.css"><link rel="stylesheet" href="/css/card.css"><link rel="stylesheet" href="/css/tag.css"><link rel="stylesheet" href="/css/mouse.css"><link rel="stylesheet" href="/css/footer.css"><link rel="stylesheet" href="/css/fonts.css"><link rel="stylesheet" href="/css/icons.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><link rel="stylesheet" href="/css/clock.min.css" /><link rel="stylesheet" href="/css/runtime.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">51</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">19</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/guide/"><i class="fa-fw fas fa-gift"></i><span> Guide</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/artitalk/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> Speak</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fa-fw fa fa-paper-plane"></i><span> Message</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/linux.jpeg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">StudentCWZ 个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/guide/"><i class="fa-fw fas fa-gift"></i><span> Guide</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/artitalk/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> Speak</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fa-fw fa fa-paper-plane"></i><span> Message</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">第十七章 文件搜索</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-05-05T00:33:30.066Z" title="Created 2022-05-05 08:33:30">2022-05-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-05-05T00:33:30.067Z" title="Updated 2022-05-05 08:33:30">2022-05-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">5.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>19min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="第十七章 文件搜索"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="第十七章-文件搜索"><a href="#第十七章-文件搜索" class="headerlink" title="第十七章 文件搜索"></a>第十七章 文件搜索</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li>本章我们主要介绍两个用于在 Linux 系统中搜索文件的工具：</li>
+</ol>
+<ul>
+<li>locate: 通过文件名查找文件</li>
+<li>find: 在文件系统目录框架中查找文件</li>
+<li>xargs: 从标准输入中建立、执行命令行</li>
+<li>touch: 更改文件的日期时间</li>
+<li>stat: 显示文件或文件系统的状态</li>
+</ul>
+<h2 id="locate-较简单的方式查找文件"><a href="#locate-较简单的方式查找文件" class="headerlink" title="locate - 较简单的方式查找文件"></a>locate - 较简单的方式查找文件</h2><ol>
+<li>locate 命令通过快速搜索数据库，以寻找路径名与给定子字符串相匹配的文件，同时输出所有匹配结果。</li>
+<li>例如，假定查找名称以 zip 字符串开头的程序，由于查找的是程序文件，所以可以认为包含所要查找的程序的目录应以 &#x2F;bin 结尾。因此，可以尝试下面的命令行。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ locate bin/zip</span><br></pre></td></tr></table></figure></li>
+<li>有时搜索需求并不是这么简单，这时便可以用 locate 命令结合其它诸如 grep 这样的工具实现一些更有趣的搜索。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ locate zip | grep bin</span><br><span class="line">/bin/bunzip2</span><br><span class="line">/bin/bzip2</span><br><span class="line">/bin/bzip2recover</span><br></pre></td></tr></table></figure></li>
+<li>locate 程序已经使用了很长时间，因此出现了多种衍生体。 slocate 和 mlocate 是现代 Linux 发行版本中最常见的两个衍生体，而它们通常都是由名为 locate 的符号链接访问。</li>
+<li>不同版本的 locate 有一些相同的选项设置，而有些版本则包括正则表达式匹配和通配符支持等。</li>
+</ol>
+<h2 id="find-较复杂的方式查找文件"><a href="#find-较复杂的方式查找文件" class="headerlink" title="find - 较复杂的方式查找文件"></a>find - 较复杂的方式查找文件</h2><h3 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h3><ol>
+<li>locate 程序查找文件仅仅是依据文件名，而 find 程序则是依据文件的各种属性在既定的目录 (及其子目录) 里查找。</li>
+<li>find 最简单的用就是用户给定一个或是更多目录名作为其搜索范围。</li>
+<li>下面就用 find 命令列出当前系统主目录 ~ 下的文件列表清单。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ find ~</span><br></pre></td></tr></table></figure></li>
+<li>对于一些比较活跃的用户，一般系统内文件会比较多，使得上述命令输出的列表肯定很长。</li>
+<li>不过，列表信息是以标准形式输出的，所以可以直接将此输出结果作为其他程序的输入。</li>
+<li>如下就是用 wc 程序计算 find 命令搜索到文件的总量。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ find ~ | <span class="built_in">wc</span> -l</span><br><span class="line">47068</span><br></pre></td></tr></table></figure></li>
+<li>find 命令的美妙之处就是可以用来搜索符合特定要求的文件，它通过综合应用 test 选项、action 选项以及 options 选项实现高级文件搜索。</li>
+</ol>
+<h3 id="test-选项"><a href="#test-选项" class="headerlink" title="test 选项"></a>test 选项</h3><ol>
+<li>基本介绍</li>
+</ol>
+<ul>
+<li>下面让我们首先了解 test 选项。假设我们想要查找的是目录文件，我们可以添加下面的 test 选项达到此目的。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ find ~ -<span class="built_in">type</span> d | <span class="built_in">wc</span> -l</span><br><span class="line">1695</span><br></pre></td></tr></table></figure></li>
+<li>添加 test 参数 -type d 可以将搜索范围限制为目录，而下面例子中使用 -type f 则表示只对普通文件进行搜索。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ find ~ -<span class="built_in">type</span> f | <span class="built_in">wc</span> -l</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol start="2">
+<li>find 支持搜索的文件类型</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">文件类型</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">b</td>
+<td align="center">块设备文件</td>
+</tr>
+<tr>
+<td align="center">c</td>
+<td align="center">字符设备文件</td>
+</tr>
+<tr>
+<td align="center">d</td>
+<td align="center">目录</td>
+</tr>
+<tr>
+<td align="center">f</td>
+<td align="center">普通文件</td>
+</tr>
+<tr>
+<td align="center">l</td>
+<td align="center">符号链接</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>案例</li>
+</ol>
+<ul>
+<li>另外我们还可以通过添加其他的 test 项参数实现依据文件大小和文件名的搜索。</li>
+<li>如下命令行就是用来查找所有符合 *.JPG 通配符格式以及超过 1 MB 的普通文件。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ find ~ -<span class="built_in">type</span> f -name <span class="string">&quot;*.JPG&quot;</span> -size +1M | <span class="built_in">wc</span> -l</span><br></pre></td></tr></table></figure></li>
+<li>本例中添加的 -name “*.JPG” 的 test 选项表示查找的是符合 .JPG 通配符格式的文件。</li>
+<li>注意，这里将通配符扩在上引号中是为了避免 shell 路径名扩展。</li>
+<li>另外添加的 -size +1M test 选项，前面的加号表示查找的文件大小比给数值 1M 大。</li>
+<li>若字符串前面是减号则表示与给定值完全相等。末尾的 M 是计算单位 MB 的简写</li>
+</ul>
+<ol start="4">
+<li>find 支持的计量单位</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">字母</th>
+<th align="center">单位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">b</td>
+<td align="center">512 字节块 (没有具体说明时的默认值)</td>
+</tr>
+<tr>
+<td align="center">c</td>
+<td align="center">字节</td>
+</tr>
+<tr>
+<td align="center">w</td>
+<td align="center">两个字节的字</td>
+</tr>
+<tr>
+<td align="center">k</td>
+<td align="center">KB (每单位包含 1024 字节)</td>
+</tr>
+<tr>
+<td align="center">M</td>
+<td align="center">MB (每单位包含 1048576 字节)</td>
+</tr>
+<tr>
+<td align="center">G</td>
+<td align="center">GB (每单位包含 1073741824 字节)</td>
+</tr>
+</tbody></table>
+<ol start="5">
+<li>find 命令的 test 参数</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">test参数</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-cmin n</td>
+<td align="center">匹配 n 分钟前改变状态 (内容或属性) 的文件或目录。如果不到 n 分钟，就用 -n ，如果超过 n 分钟，就用 +n</td>
+</tr>
+<tr>
+<td align="center">-cnewer file</td>
+<td align="center">匹配内容或属性的修改时间比文件 file 更晚的文件或目录</td>
+</tr>
+<tr>
+<td align="center">-ctime n</td>
+<td align="center">匹配系统中 n*24 小时前文件状态被改变 (内容、属性、访问权限等) 的文件或目录</td>
+</tr>
+<tr>
+<td align="center">-empty</td>
+<td align="center">匹配空文件及空目录</td>
+</tr>
+<tr>
+<td align="center">-group name</td>
+<td align="center">匹配属于 name 组的文件或目录。 name 可以描述为组名，也可以描述为该组的 ID 号</td>
+</tr>
+<tr>
+<td align="center">-iname pattern</td>
+<td align="center">与 -name test 项功能类似只是不区分大小写</td>
+</tr>
+<tr>
+<td align="center">-inum n</td>
+<td align="center">匹配索引节点是 n 的文件。该 test 选项有助于查找某个特定索引节点上的所有硬件连接</td>
+</tr>
+<tr>
+<td align="center">-mmin n</td>
+<td align="center">匹配 n 分钟前内容被修改的文件或目录</td>
+</tr>
+<tr>
+<td align="center">-mtime n</td>
+<td align="center">匹配 n*24 小时前只有内容被更改的文件或目录</td>
+</tr>
+<tr>
+<td align="center">-name pattern</td>
+<td align="center">匹配有特定通配符模式的文件或目录</td>
+</tr>
+<tr>
+<td align="center">-newer file</td>
+<td align="center">匹配内容的修改时间比 file 文件更近的文件或目录。这在编写 shell 脚本进行文件备份的时候非常有用。每次创建备份时，更新某个文件 (比如日志) ，然后用 find+ 此参数选项来确定上一次更新后哪个文件改变了</td>
+</tr>
+<tr>
+<td align="center">-nouser</td>
+<td align="center">匹配不属于有效用户的文件或目录。该 test 可以用来查找哪些属于已删除账户的文件，也可以用来检测攻击者的活动匹配不属于有小组的文件或目录</td>
+</tr>
+<tr>
+<td align="center">-perm mode</td>
+<td align="center">寻找访问权限与既定模式匹配的文件或目录。既定模式可以用八进制或符号的形式表示</td>
+</tr>
+<tr>
+<td align="center">-samefile name</td>
+<td align="center">与 -inum test 选项类似。匹配与 file 文件用相同的 inode 号的文件</td>
+</tr>
+<tr>
+<td align="center">-size n</td>
+<td align="center">匹配 n 大小的文件</td>
+</tr>
+<tr>
+<td align="center">-type c</td>
+<td align="center">匹配 c 类型的文件</td>
+</tr>
+<tr>
+<td align="center">-user name</td>
+<td align="center">匹配属于 name 用户的文件和目录。 name 可以描述为用户也可以描述该组的 ID 号</td>
+</tr>
+</tbody></table>
+<h3 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h3><ol>
+<li>基本介绍</li>
+</ol>
+<ul>
+<li>即使拥有 find 命令提供的所有 test 参数，我们仍然会需要一个更好的工具来描述 test 参数之间的逻辑关系。</li>
+<li>例如，如果我们需要确定某目录下是否所有的文件和子目录都有安全的访问权限，该怎么办？原则上就是去查找那么访问权限不是 0600 的文件和访问权限不是 0700 的子目录。</li>
+<li>幸运的是，find 命令的 test 可以结合逻辑操作从而建立具有复杂逻辑关系的匹配条件。</li>
+<li>我们可以用下面的命令行来满足上述 find 命令的匹配搜索。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ find ~ \(-<span class="built_in">type</span> f -not -perm 0600 \) -or \(-<span class="built_in">type</span> d -not -perm 0700 \)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol start="2">
+<li>find 命令的逻辑操作符</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">操作符</th>
+<th align="center">功能描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-and (与操作)</td>
+<td align="center">查找使该操作符两遍的检验条件都是真的匹配文件。有时直接缩写成 -a 。注意如果两个检测条件之间没有显式的显式操作符， and 就是默认的逻辑关系</td>
+</tr>
+<tr>
+<td align="center">-or (或操作)</td>
+<td align="center">查找使该操作符任何一边的检测条件为真的匹配文件。有时候直接缩写成 -o</td>
+</tr>
+<tr>
+<td align="center">-not (非操作)</td>
+<td align="center">查找使该操作符后面的检测条件为假的匹配文件。有时候直接缩写成-!</td>
+</tr>
+<tr>
+<td align="center">() (括号操作)</td>
+<td align="center">有时为了获得想要的结果必须扰乱默认的执行顺序，即便不需要，将一串字符表达式括起来对提高命令的可读性也很有帮助。请注意，括号字符在 shell 环境中有特殊意义，所以必须将它们在命令行中用引号引起来，这样才能作为 find 的参数传递。通常用反斜杠来避免这样的问题</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>操作符的补充说明</li>
+</ol>
+<ul>
+<li>对照这张逻辑操作符的列表，重新剖析上述的 find 命令行。从最全局的角度看，所有检测条件由一个或 (or) 操作符分成了两组。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(表达式1) -or (表达式2) </span><br></pre></td></tr></table></figure></li>
+<li>这样做是有原因的，因为我们查找的是具有某种权限设置的文件和另外一种权限设置的目录。</li>
+<li>那既然要同时查找文件和目录，怎么不使用 and 而是用 or ？因为 find 命令在扫描所有的文件和目录时，会判断每一个文件或目录是否匹配该 test 项检测条件。</li>
+<li>而我们的目标是具有不安全访问权限的文件或是具有不安全访问权限的目录，都知道匹配者不可能既是文件又是目录，所以不能用 and 逻辑关系。由此，可将表达式扩充如下：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(file with bad perms) -or (directory with bad perms)</span><br></pre></td></tr></table></figure></li>
+<li>接下来的问题就是如何判断文件或是目录具有危险权限，我们该怎么做呢？事实上，我们并不需要直接去寻找危险权限的文件或是目录，而是查找那些具有不好权限的文件或目录，因为我们知道什么是好的权限。</li>
+<li>对于文件来说，权限是 0600 表示好的，而对于目录，好的权限应该是 0700 。于是，判断具有不好访问权限的文件的表达式如下：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-<span class="built_in">type</span> f -and -not -perms 0600</span><br></pre></td></tr></table></figure></li>
+<li>同样，判断具有不好访问权限的目录的表达式如下：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-<span class="built_in">type</span> d -and -not -perms 0700</span><br></pre></td></tr></table></figure></li>
+<li>and 操作是默认的，所以可以安全地移除。把如上表达式都整理到一起一下。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ~ (-<span class="built_in">type</span> f -not -perms 0600) -or (-<span class="built_in">type</span> d not -perms 0700)</span><br></pre></td></tr></table></figure></li>
+<li>然而，由于括号在 shell 环境下有特殊含义，所以我们必须对它们进行转义以防 shell 试图编译它们。在每个括号前加上反斜杠便可解决此问题。 </li>
+<li>逻辑运算符的另外一个特性也很值得大家了解，有如下两个逻辑操作符分开的表达式：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">expr1 -operator expr2</span><br></pre></td></tr></table></figure></li>
+<li>在任何情况下，表达式 expr1 都会被执行，而中间的操作符将决定表达式 expr2 是否被执行</li>
+</ul>
+<ol start="4">
+<li>find 命令的 and&#x2F;or 逻辑运算</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">表达式 expr1 的结果</th>
+<th align="center">逻辑操作</th>
+<th align="center">表达式 expr2 执行情况</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">真</td>
+<td align="center">and</td>
+<td align="center">总是执行</td>
+</tr>
+<tr>
+<td align="center">假</td>
+<td align="center">and</td>
+<td align="center">不执行</td>
+</tr>
+<tr>
+<td align="center">真</td>
+<td align="center">or</td>
+<td align="center">不执行</td>
+</tr>
+<tr>
+<td align="center">假</td>
+<td align="center">or</td>
+<td align="center">总是执行</td>
+</tr>
+</tbody></table>
+<ol start="5">
+<li>操作符细节说明</li>
+</ol>
+<ul>
+<li>主要还是为了提高效率，以 -and 逻辑运算为例，很明显表达式 expr1 -and expr2 的值在 expr1 为假的情况下不可能为真，所以就没有必要再运算表达式 expr2 了。</li>
+<li>同样，对于表达式 expr1 -or expr2 ，在表达式 expr1 为真的情况下其逻辑值显然为真，于是就没有必要在运算表达式 expr2 了。</li>
+</ul>
+<h3 id="action-选项"><a href="#action-选项" class="headerlink" title="action 选项"></a>action 选项</h3><h4 id="基本介绍-1"><a href="#基本介绍-1" class="headerlink" title="基本介绍"></a>基本介绍</h4><ol>
+<li>前面 find 命令已经查找到所需要的文件，但是我们真正想做的是处理这些已查找的文件。幸运的是，find 命令允许直接对搜索结果执行动作。</li>
+</ol>
+<h4 id="预定义动作"><a href="#预定义动作" class="headerlink" title="预定义动作"></a>预定义动作</h4><ol>
+<li>基本介绍</li>
+</ol>
+<ul>
+<li>对搜索到的文件进行操作，即可以用诸多现成的预定义动作指令，也可以使用用户自定义的动作。首先来看一些预定义动作。</li>
+</ul>
+<ol start="2">
+<li>预定义的 find 命令操作</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">动作</th>
+<th align="center">功能描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-delete</td>
+<td align="center">删除匹配文件</td>
+</tr>
+<tr>
+<td align="center">-ls</td>
+<td align="center">对匹配文件执行 ls 操作，以标准格式输出其文件名以及所要求的的其他信息</td>
+</tr>
+<tr>
+<td align="center">-print</td>
+<td align="center">将匹配的文件的全路径以标准形式输出，当没有指定任何具体操作时，该操作是默认操作</td>
+</tr>
+<tr>
+<td align="center">-quit</td>
+<td align="center">一旦匹配成功便退出</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>案例</li>
+</ol>
+<ul>
+<li>本章开头所举的第一个例子如下。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ~</span><br></pre></td></tr></table></figure></li>
+<li>此命令行产生了一个包含当前系统主 ~ 目录中所有文件和子目录的列表。</li>
+<li>列表之所以会在屏幕上显示出来，是因为在没有指定其他操作的情况下，-print 操作是默认的。因此，上述命令行等效于如下形式的命令行。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ~ -<span class="built_in">print</span></span><br></pre></td></tr></table></figure></li>
+<li>当然也可以使用 find 命令删除满足特定条件的文件。示例如下，此命令行用于删除 .BAK (这种文件一般是用来制动备份文件的) 后缀的文件。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ~ -<span class="built_in">type</span> f -name <span class="string">&#x27;.BAK&#x27;</span> -delete</span><br></pre></td></tr></table></figure></li>
+<li>本例中，用户主目录及其子目录下的每个文件都搜索了一遍匹配文件名以 .BAK 结尾的文件。一旦被找到，直接删除。</li>
+<li>毫无疑问，在使用 -delete 操作时，你一定要格外小心。最好先用 -print 操作确认搜索结果后再执行 -delete 删除命令。</li>
+<li>补充介绍一下逻辑运算是如何映像 find 的 action 操作的。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ~ -<span class="built_in">type</span> f -name <span class="string">&#x27;*.BAK&#x27;</span> -<span class="built_in">print</span></span><br></pre></td></tr></table></figure></li>
+<li>正如我们所知道，该命令行用来查找所有文件名以 .BAK 结尾的普通文件 (-type f) 并且以标准形式 (-print) 输出每个匹配文件的相关路径名。</li>
+<li>然而，该命令行之所以照这样方式是由每个 test 选项和 action 之间的逻辑关系决定的。记住，每个 test 选项和 action 选项之间默认的逻辑关系是与 (and) 逻辑。下面的命令行逻辑关系能看得更清楚些。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ~ -<span class="built_in">type</span> f -and -name <span class="string">&#x27;*.BAK&#x27;</span> -and -<span class="built_in">print</span></span><br></pre></td></tr></table></figure></li>
+<li>如上便是完整的表达式，列出了逻辑运算符是如何影响 action 操作的。</li>
+</ul>
+<ol start="4">
+<li>逻辑运算符的影响</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">检测条件&#x2F;执行操作</th>
+<th align="center">在该情况下执行操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-print</td>
+<td align="center">-type f 和 -name ‘*.BAK’ 条件都匹配时，也就是文件是普通文件并且文件名也是以 .BAK 结尾时</td>
+</tr>
+<tr>
+<td align="center">-name ‘*.BAK’</td>
+<td align="center">-type f 项匹配，也就是说文件是普通文件时</td>
+</tr>
+<tr>
+<td align="center">-type f</td>
+<td align="center">总是执行，因为是与逻辑关系中的第一个操作数</td>
+</tr>
+</tbody></table>
+<ol start="5">
+<li>补充说明</li>
+</ol>
+<ul>
+<li>test 选项与 action 选项之间的逻辑关系决定了他们的执行情况，所以 test 选项和 action 选项的顺序很重要。</li>
+<li>例如，如果重新排列这些 test 选项和 action 选项，并将 -print 操作作为逻辑运算的第一个操作数，那么命令行的运行结果将会有很大不同。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ~ -<span class="built_in">print</span> -and -<span class="built_in">type</span> f -and -name <span class="string">&#x27;*.BAK&#x27;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol start="6">
+<li>此命令行把每个文件显示出来 (因为 -print 操作运算值总是为真) ，然后再对文件类型以及特定的文件扩展名进行匹配检查。</li>
+</ol>
+<h4 id="用户自定义操作"><a href="#用户自定义操作" class="headerlink" title="用户自定义操作"></a>用户自定义操作</h4><ol>
+<li>除了已有的预定义操作命令，同样也可以任意调用用户想要执行的操作命令，传统的方法就是像以下命令行使用 -exec 操作。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-<span class="built_in">exec</span> <span class="built_in">command</span> &#123;&#125;;</span><br></pre></td></tr></table></figure></li>
+<li>该格式中的 command 表示要执行的操作命令名，{} 花括号代表的是当前路径，而分号作为必需的分隔符表示命令结束。使用 -exec 完成 -delete 操作示例如下。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-<span class="built_in">exec</span> <span class="built_in">rm</span> <span class="string">&#x27;&#123;&#125;&#x27;</span> <span class="string">&#x27;;&#x27;</span></span><br></pre></td></tr></table></figure></li>
+<li>同样，由于括号和分号字符在 shell 环境下有特殊含义，所以在输入命令行时，要将它们用引号引起来或者转义符隔开。</li>
+<li>当然，交互式地执行用户自定义操作也不是不可能。通过使用 -ok 操作取代原来的 -exec 操作，每一次指定命令执行之前系统都会询问用户。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">find ~ -<span class="built_in">type</span> f -name <span class="string">&#x27;foo*&#x27;</span> -ok <span class="built_in">ls</span> -l <span class="string">&#x27;&#123;&#125;&#x27;</span> <span class="string">&#x27;;&#x27;</span></span><br><span class="line">&lt; <span class="built_in">ls</span> ... /home/me/binfoo &gt; ? y</span><br><span class="line">-rwxr-xr-x 1 me me 224 2011-10-29 18:44 /home/me/foo</span><br><span class="line">&lt; <span class="built_in">ls</span> ... /home/me/foo.txt &gt; ? y</span><br><span class="line">-rw-r--r-- 1 me me 0 2012-09-19 12:53 /home/me/foo.txt</span><br></pre></td></tr></table></figure></li>
+<li>上例中，查找文件名以 foo 字符串开始的文件，并且每次找到匹配文件后执行 ls -l 命令。 -ok 操作会在 ls 命令执行之前询问用户是否执行。</li>
+</ol>
+<h4 id="提高效率"><a href="#提高效率" class="headerlink" title="提高效率"></a>提高效率</h4><ol>
+<li>当使用 -exec 操作时，每次查找到匹配文件后都会调用执行一次指定命令。但有时用户更希望只调用一次命令就完成所有匹配文件的操作。例如，多数人可能更喜欢这样的命令执行方式。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -l file1</span><br><span class="line"><span class="built_in">ls</span> -l file2</span><br></pre></td></tr></table></figure></li>
+<li>而不是以下这样的方式。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -l file1 file2</span><br></pre></td></tr></table></figure></li>
+<li>第一种方式只需要执行命令一次而第二种方式则要多次重复执行。实现这样的一次操作的两种方法：一种方式比较传统，使用外部命令 xarges ；另一种则是使用 find 本身自带的新特性。首先介绍下第二方法。</li>
+<li>通过将命令行末尾的分号改为加号，便可将 find 命令所搜索到匹配结果作为指定命令的输入，从而一次完全对所有文件操作。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ~ -<span class="built_in">type</span> f -name <span class="string">&#x27;foo*&#x27;</span> -<span class="built_in">exec</span> <span class="built_in">ls</span> <span class="string">&#x27;&#123;&#125;&#x27;</span> +</span><br></pre></td></tr></table></figure></li>
+<li>上面的例子，每次找到匹配文件后就执行一次 ls 命令。将上述命令行改成下面的命令行。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">find ~ -<span class="built_in">type</span> f -name <span class="string">&#x27;foo*&#x27;</span> -<span class="built_in">exec</span> <span class="built_in">ls</span> -l <span class="string">&#x27;&#123;&#125;&#x27;</span> +</span><br><span class="line">-rwxr-xr-x 1 me me 224 2011-10-29 18:44 /home/me/bin/foo</span><br><span class="line">-rw-r--r-- 1 me me 0 2012-09-19 12:53 /home/me/foo.txt</span><br></pre></td></tr></table></figure></li>
+<li>我们也能得到相同的结果，但是系统整体只执行一次 ls 命令。</li>
+<li>同样我们可以使用 xargs 命令获得相同的效果，xargs 输入， xargs 反过来将其转换成了 ls 命令的输入参数列表，最后执行 ls 操作。</li>
+<li>虽然一个命令行中可允许输入的参数有很多，但这并不表示可以无限输入，也存在命令行过长而使得 shell 编辑器无法承受的情况。</li>
+<li>如果命令行中包含的输入参数太多而超过了系统支持的最大长度， xargs 只会尽可能对最大数量的参数执行指定操作，并不断重复这一过程知道所有标准输入全部处理完毕。</li>
+<li>在 xargs 命令后面添加 –show-limits 选项，即可知道命令行最大能承受的参数数量。</li>
+</ol>
+<h3 id="返回到-playground-文件夹"><a href="#返回到-playground-文件夹" class="headerlink" title="返回到 playground 文件夹"></a>返回到 playground 文件夹</h3><ol>
+<li>现在可以实际应用 find 命令了。首先让我们创建一个包含很多子目录及文件的 playground 文件夹平台。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ <span class="built_in">mkdir</span> -p playground/dir-&#123;00&#123;1..9&#125;,0&#123;10..99&#125;,100&#125;</span><br><span class="line">[me@linuxbox ~]$ <span class="built_in">touch</span> playground/dir-&#123;00&#123;1..9&#125;,0&#123;10..9&#125;,100&#125;/file-&#123;A..Z&#125;</span><br></pre></td></tr></table></figure></li>
+<li>不得不惊叹于 Linux 命令行的威力！简单的两行命令，就创建了一个包含 100 个子目录的 playground 文件夹，并且每个子目录中又包含 26 个空文件。</li>
+<li>我们用来创造这个奇迹的方法包含一个熟悉的命令 mkdir、一个奇异的 shell 花括号扩展以及一个新命令 touch 。</li>
+<li>mkdir 命令结合 -p 选项 (-p 选项是的 mkdir 命令按指定的路径创建父目录) 的同时用花括号扩展，便完成了 100 个目录的创建。</li>
+<li>touch 命令一般用于设定或是更新文件的修改时间。然而，当文件名参数是一个不存在的文件时，那么该命令就会创建一个空文件。</li>
+<li>playground 文件夹里，总共创建了 100 个叫做 file-A 的文件。现在，我们可以查找它们。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ find playground -<span class="built_in">type</span> f -name <span class="string">&#x27;file-A&#x27;</span></span><br></pre></td></tr></table></figure></li>
+<li>请注意，与 ls 命令不同，find 命令不会产生有排列顺序的结果，其输出顺序是由在存储设备中的布局决定的。</li>
+<li>下面的命令行验证了该文件夹确实有 100 个 file-A 文件。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ find playground -<span class="built_in">type</span> f -name <span class="string">&#x27;file-A&#x27;</span> | <span class="built_in">wc</span> -l</span><br><span class="line">100</span><br></pre></td></tr></table></figure></li>
+<li>下面来看一个根据文件的修改时间查找文件的例子，在这创建备份文件以及按时间顺序排列文件时非常有用。首先需要创建一个用作比较修改时间的参照文件。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ <span class="built_in">touch</span> playground/timestamp</span><br></pre></td></tr></table></figure></li>
+<li>该命令行创建了一个名为 timestamp 的空文件，并将当前时刻设为该文件的修改时间。我们可以使用另外一个便捷的命令 stat 来检验执行效果，stat 命令可以说是 ls 的增强版，该命令会将系统所掌握文件的所有信息及属性全部显示出来。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ <span class="built_in">stat</span> playground/timestamp</span><br><span class="line">File:<span class="string">&#x27;playground、timestamp&#x27;</span></span><br><span class="line">Size: 0     Blocks: 0  IO Block: 4096 regular empty file</span><br><span class="line">Device: 803h/2051d Inode: 14265061 Links: 1</span><br><span class="line">Access: (0644/-rw-r--r--) Uid: (1001/me) Gid:(1001/me)</span><br><span class="line">Acess: (0644/-rw-r--) Uid: (100/me) Gid:(1001/me)</span><br><span class="line">Access:2012-10-08 15:15:39.00000000 -0400</span><br><span class="line">Modify: 2012-10-08 15:15:39.00000000 -0400</span><br><span class="line">Change: 2012-10-08 15:15:39.00000000 -0400</span><br></pre></td></tr></table></figure></li>
+<li>接下来，我们便可以用 find 命令更新 playground 文件夹里的一些文件。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ find playground -<span class="built_in">type</span> f -newer playground/timestamp</span><br></pre></td></tr></table></figure></li>
+<li>命令行的运行结果包含 100 个文件名为 file-B 的文件。由于我们是在对 timestamp 文件执行了 touch 命令之后，才对 playground 文件夹对名为 file-B 的所有文件执行了 touch 操作，所以它们现在要比 timestamp 文件新，从而我们可选用 -newer test 选项查找。</li>
+<li>最后，回顾之前讨论的查找不安全访问权限文件的例子，并将其用于 playground 目录。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ find playground \(-<span class="built_in">type</span> f -not -perm 0600 \) -or \(-<span class="built_in">type</span> d -not -perm 0700 \)</span><br></pre></td></tr></table></figure></li>
+<li>该命令行列出了 playground 目录下的下的所有的 100 个子目录以及 2600 个文件 (再加上 timestamp 文件和 playground 自身，总共 2072 个) ，之所以全部列出是因为 playground 里面没有一个文件满足安全访问权限的要求。</li>
+<li>运用前面所学 find 命令的 operator 选项和 action 选项的知识，我们可以在命令后面增加 action 参数选项来改变 playground 目录下文件或目录的访问权限。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ find playground \( -<span class="built_in">type</span> f -not -perm 0700 -<span class="built_in">exec</span> <span class="built_in">chmod</span> 0700 <span class="string">&#x27;&#123;&#125;&#x27;</span> <span class="string">&#x27;;&#x27;</span> \)</span><br></pre></td></tr></table></figure></li>
+<li>依据日常经验，大家可能会觉得用两条命令-分别针对目录和文件，比用这样一个长而复杂的命令容易的多。不过知道这一知识点总比不知道好，此处的重点是，要了解如何结合使用操作符选项与行为选项，来执行一些有用的任务。</li>
+</ol>
+<h3 id="option-选项"><a href="#option-选项" class="headerlink" title="option 选项"></a>option 选项</h3><ol>
+<li>基本介绍</li>
+</ol>
+<ul>
+<li>最后，我们谈一个 find 命令的 option 选项。 option 选项用于控制 find 命令的搜索范围。</li>
+<li>在构成 find 命令的表达式时，他们可能包含在其他测试选项或行为选项之中。</li>
+</ul>
+<ol start="2">
+<li>find 命令的 option 选项</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">选项</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-depth</td>
+<td align="center">引导 find 程序处理目录前先处理目录内文件。当指定 -delete 操作时，该参数选项会自动调用</td>
+</tr>
+<tr>
+<td align="center">-maxdepth levels</td>
+<td align="center">当执行测试条件行为时，设置 find 程序陷入目录数的最大级别数</td>
+</tr>
+<tr>
+<td align="center">-mindepth levels</td>
+<td align="center">在应用测试条件和行为之前，设置 find 程序陷入目录数的最小级别数</td>
+</tr>
+<tr>
+<td align="center">-mount</td>
+<td align="center">引导 find 不去遍历挂载在其他文件系统上的目录</td>
+</tr>
+<tr>
+<td align="center">-noleaf</td>
+<td align="center">指导 find 程序不要基于正在搜索 UNIX 文件系统的假设来优化它的搜索。当扫描 DOS&#x2F;Windows 文件系统和 CD 时，会用到该选项</td>
+</tr>
+</tbody></table>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul>
+<li>转载：Linux 命令行大全</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:330459539@qq.com">StudentCWZ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://studentcwz.github.io/post/dbc052ec.html">https://studentcwz.github.io/post/dbc052ec.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a></div><div class="post_share"><div class="social-share" data-image="/img/linux.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/d672eea5.html"><img class="prev-cover" src="/img/linux.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">第十一章 环境</div></div></a></div><div class="next-post pull-right"><a href="/post/cf2b821b.html"><img class="next-cover" src="/img/linux.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">第二十章 文本处理</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/post/37c791b4.html" title="第一章 Shell 是什么"><img class="cover" src="/img/linux.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-27</div><div class="title">第一章 Shell 是什么</div></div></a></div><div><a href="/post/ffbaef4b.html" title="第七章 透过 Shell 看世界"><img class="cover" src="/img/linux.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-28</div><div class="title">第七章 透过 Shell 看世界</div></div></a></div><div><a href="/post/2cc576b7.html" title="第三章 Linux 基本系统"><img class="cover" src="/img/linux.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-27</div><div class="title">第三章 Linux 基本系统</div></div></a></div><div><a href="/post/b2b5d2f0.html" title="第二十三章 编译程序"><img class="cover" src="/img/linux.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-05</div><div class="title">第二十三章 编译程序</div></div></a></div><div><a href="/post/d9bb899a.html" title="第二十二章 打印"><img class="cover" src="/img/linux.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-05</div><div class="title">第二十二章 打印</div></div></a></div><div><a href="/post/3d3cca4.html" title="第二章 导航.md"><img class="cover" src="/img/linux.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-27</div><div class="title">第二章 导航.md</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div><div id="comment-switch"><span class="first-comment">Twikoo</span><span class="switch-btn"></span><span class="second-comment">Gitalk</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">StudentCWZ</div><div class="author-info__description">Golang and Python developer, always learning new things.</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">51</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">19</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/StudentCWZ"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://qq.com/" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="https://weixin.qq.com/" target="_blank" title="Wechat"><i class="fab fa-weixin"></i></a><a class="social-icon" href="https://mail.qq.com/" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://www.yinxiang.com/" target="_blank" title="Evernote"><i class="fa-brands fa-evernote"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Welcome to my Blog !</div><timing><div class="twopeople"></div></timing></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%83%E7%AB%A0-%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2"><span class="toc-number">1.</span> <span class="toc-text">第十七章 文件搜索</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#locate-%E8%BE%83%E7%AE%80%E5%8D%95%E7%9A%84%E6%96%B9%E5%BC%8F%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text">locate - 较简单的方式查找文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#find-%E8%BE%83%E5%A4%8D%E6%9D%82%E7%9A%84%E6%96%B9%E5%BC%8F%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">find - 较复杂的方式查找文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.3.1.</span> <span class="toc-text">基本介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#test-%E9%80%89%E9%A1%B9"><span class="toc-number">1.3.2.</span> <span class="toc-text">test 选项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">1.3.3.</span> <span class="toc-text">操作符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#action-%E9%80%89%E9%A1%B9"><span class="toc-number">1.3.4.</span> <span class="toc-text">action 选项</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D-1"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">基本介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A2%84%E5%AE%9A%E4%B9%89%E5%8A%A8%E4%BD%9C"><span class="toc-number">1.3.4.2.</span> <span class="toc-text">预定义动作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E8%87%AA%E5%AE%9A%E4%B9%89%E6%93%8D%E4%BD%9C"><span class="toc-number">1.3.4.3.</span> <span class="toc-text">用户自定义操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8F%90%E9%AB%98%E6%95%88%E7%8E%87"><span class="toc-number">1.3.4.4.</span> <span class="toc-text">提高效率</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E5%88%B0-playground-%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-number">1.3.5.</span> <span class="toc-text">返回到 playground 文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#option-%E9%80%89%E9%A1%B9"><span class="toc-number">1.3.6.</span> <span class="toc-text">option 选项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-number">1.4.</span> <span class="toc-text">参考文章</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/29c840ec.html" title="第二章 Golang 概述"><img src="/img/golang.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第二章 Golang 概述"/></a><div class="content"><a class="title" href="/post/29c840ec.html" title="第二章 Golang 概述">第二章 Golang 概述</a><time datetime="2022-05-11T07:00:59.189Z" title="Created 2022-05-11 15:00:59">2022-05-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/2db18b60.html" title="第一章 Golang 开山篇"><img src="/img/golang.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第一章 Golang 开山篇"/></a><div class="content"><a class="title" href="/post/2db18b60.html" title="第一章 Golang 开山篇">第一章 Golang 开山篇</a><time datetime="2022-05-11T06:46:35.270Z" title="Created 2022-05-11 14:46:35">2022-05-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/2f93ff5d.html" title="第十六章 网络"><img src="/img/linux.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第十六章 网络"/></a><div class="content"><a class="title" href="/post/2f93ff5d.html" title="第十六章 网络">第十六章 网络</a><time datetime="2022-05-05T00:33:30.068Z" title="Created 2022-05-05 08:33:30">2022-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/4decfb84.html" title="第十四章 软件包管理"><img src="/img/linux.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第十四章 软件包管理"/></a><div class="content"><a class="title" href="/post/4decfb84.html" title="第十四章 软件包管理">第十四章 软件包管理</a><time datetime="2022-05-05T00:33:30.068Z" title="Created 2022-05-05 08:33:30">2022-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/2421dd09.html" title="第十五章 存储介质"><img src="/img/linux.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第十五章 存储介质"/></a><div class="content"><a class="title" href="/post/2421dd09.html" title="第十五章 存储介质">第十五章 存储介质</a><time datetime="2022-05-05T00:33:30.068Z" title="Created 2022-05-05 08:33:30">2022-05-05</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 By StudentCWZ</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Toggle Between Traditional Chinese And Simplified Chinese">繁</button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Local search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (true){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-gilt-psi.vercel.app/',
+      region: 'ap-shanghai',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.vemoji)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-gilt-psi.vercel.app/',
+      region: 'ap-shanghai',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      document.getElementById('twikoo-count').innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script><script>function addGitalkSource () {
+  const ele = document.createElement('link')
+  ele.rel = 'stylesheet'
+  ele.href= 'https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css'
+  document.getElementsByTagName('head')[0].appendChild(ele)
+}
+
+function loadGitalk () {
+  function initGitalk () {
+    var gitalk = new Gitalk(Object.assign({
+      clientID: '339388df88d5b5d67362',
+      clientSecret: 'f7a589f837f79a63fb47efae87c7aca989ed1507',
+      repo: 'blog-comments',
+      owner: 'StudentCWZ',
+      admin: ['StudentCWZ'],
+      id: 'cc3adffd07b91a9a8e1ab1dcc3b9ad51',
+      updateCountCallback: commentCount
+    },null))
+
+    gitalk.render('gitalk-container')
+  }
+
+  if (typeof Gitalk === 'function') initGitalk()
+  else {
+    addGitalkSource()
+    getScript('https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js').then(initGitalk)
+  }
+}
+
+function commentCount(n){
+  let isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+  if (isCommentCount) {
+    isCommentCount.innerHTML= n
+  }
+}
+
+if ('Twikoo' === 'Gitalk' || !false) {
+  if (false) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+  else loadGitalk()
+} else {
+  function loadOtherComment () {
+    loadGitalk()
+  }
+}</script></div><script src="/js/jquery.min.js"></script><script src="/js/mouse_snow.js" defer></script><script src="/js/sakura.js" defer></script><script src="/js/timing.js" defer></script><script src="https://pv.sohu.com/cityjson?ie=utf-8" defer></script><script src="/js/ip_content.js" defer></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.16/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?StudentCWZ";
+            var git_color =['#ebedf0', '#f1f8ff', '#dbedff', '#c8e1ff', '#79b8ff', '#2188ff', '#0366d6', '#005cc5', '#044289', '#032f62', '#05264c'];
+            var git_user ="StudentCWZ";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style>undefined</style><script data-pjax>function history_calendar_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div>';
+                console.log('已挂载history_calendar')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            history_calendar_injector_config()
+        } </script><script data-pjax  src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script><script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="https://npm.elemecdn.com/hexo-butterfly-clock/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://npm.elemecdn.com/hexo-butterfly-clock/lib/clock.min.js"></script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="workboard"></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title=""><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v3.8.2" title=""><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/runtime.js"></script><!-- hexo injector body_end end --><script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body></html>

@@ -1,0 +1,739 @@
+<!DOCTYPE html><html lang="zh_TW" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>第十章 进程 | StudentCWZ 个人博客</title><meta name="keywords" content="Linux"><meta name="author" content="StudentCWZ,330459539@qq.com"><meta name="copyright" content="StudentCWZ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="第十章 进程前言 现代操作系统通常都支持多重任务管理。 多重任务处理是指系统通过快速切换运行中的程序来实现多个任务的同时执行。 Linux 内核通过使用进程来管理多重任务。 进程是 Linux 用来安排不同程序等待 CPU 调度的一种组织方式。 有时候计算机运行速度会变得很慢，或者应用程序会停止响应。 本章将介绍命令行中可用来查看程序当前的运行情况以及终止运行异常的进程的一些工具：   ps: 实">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第十章 进程">
+<meta property="og:url" content="https://studentcwz.github.io/post/cfd6444.html">
+<meta property="og:site_name" content="StudentCWZ 个人博客">
+<meta property="og:description" content="第十章 进程前言 现代操作系统通常都支持多重任务管理。 多重任务处理是指系统通过快速切换运行中的程序来实现多个任务的同时执行。 Linux 内核通过使用进程来管理多重任务。 进程是 Linux 用来安排不同程序等待 CPU 调度的一种组织方式。 有时候计算机运行速度会变得很慢，或者应用程序会停止响应。 本章将介绍命令行中可用来查看程序当前的运行情况以及终止运行异常的进程的一些工具：   ps: 实">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://studentcwz.github.io/img/linux.jpeg">
+<meta property="article:published_time" content="2022-05-05T00:33:30.068Z">
+<meta property="article:modified_time" content="2022-05-05T00:33:30.069Z">
+<meta property="article:author" content="StudentCWZ">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://studentcwz.github.io/img/linux.jpeg"><link rel="shortcut icon" href="/img/favicon.jpeg"><link rel="canonical" href="https://studentcwz.github.io/post/cfd6444"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '第十章 进程',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-05-05 08:33:30'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 6 || hour >= 18
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/static-butterfly/dist/css/index.min.css"><link rel="stylesheet" href="/css/scroll.css"><link rel="stylesheet" href="/css/macblack.css"><link rel="stylesheet" href="/css/card.css"><link rel="stylesheet" href="/css/tag.css"><link rel="stylesheet" href="/css/mouse.css"><link rel="stylesheet" href="/css/footer.css"><link rel="stylesheet" href="/css/fonts.css"><link rel="stylesheet" href="/css/icons.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><link rel="stylesheet" href="/css/clock.min.css" /><link rel="stylesheet" href="/css/runtime.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">51</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">19</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/guide/"><i class="fa-fw fas fa-gift"></i><span> Guide</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/artitalk/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> Speak</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fa-fw fa fa-paper-plane"></i><span> Message</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/linux.jpeg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">StudentCWZ 个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/guide/"><i class="fa-fw fas fa-gift"></i><span> Guide</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/artitalk/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> Speak</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fa-fw fa fa-paper-plane"></i><span> Message</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">第十章 进程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-05-05T00:33:30.068Z" title="Created 2022-05-05 08:33:30">2022-05-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-05-05T00:33:30.069Z" title="Updated 2022-05-05 08:33:30">2022-05-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>17min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="第十章 进程"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="第十章-进程"><a href="#第十章-进程" class="headerlink" title="第十章 进程"></a>第十章 进程</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li>现代操作系统通常都支持多重任务管理。</li>
+<li>多重任务处理是指系统通过快速切换运行中的程序来实现多个任务的同时执行。</li>
+<li>Linux 内核通过使用进程来管理多重任务。</li>
+<li>进程是 Linux 用来安排不同程序等待 CPU 调度的一种组织方式。</li>
+<li>有时候计算机运行速度会变得很慢，或者应用程序会停止响应。</li>
+<li>本章将介绍命令行中可用来查看程序当前的运行情况以及终止运行异常的进程的一些工具：</li>
+</ol>
+<ul>
+<li>ps: 实现当前所有进程的运行情况 </li>
+<li>top: 实时显示当前所有任务的资源占用情况 </li>
+<li>jobs: 列出所有活动作业的状态信息</li>
+<li>bg: 设置在后台中运行作业</li>
+<li>fg: 设置在前台中运行作业</li>
+<li>kill: 杀死指定名字的进程</li>
+<li>shutdown: 关机或者重启系统</li>
+</ul>
+<h2 id="进程如何工作"><a href="#进程如何工作" class="headerlink" title="进程如何工作"></a>进程如何工作</h2><h3 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h3><ol>
+<li>系统启动时，内核先把它的一些程序初始化为进程，然后运行一个称为 init 的程序。</li>
+<li>init 程序将依次运行一系列称为脚本初始化  (init script) 的 shell 脚本 (放在 &#x2F;etc 目录下) ，这些脚本将会启动所有的系统服务。其中的很多服务都是通过守护程序 (daemon program) 来实现的。</li>
+<li>后台程序只是呆在后台做它们自己的事情，并且没有用户界面。</li>
+<li>因此，即使没有用户登录，系统也在忙于执行一些例行程序。</li>
+<li>一个程序的运行可以触发其他程序的运行，在进程系统中这种情况被表述为父进程创建子进程。</li>
+<li>内核会保存每个进程的信息以便确保任务有序进行。比如，每个进程将被分配一个称为进程 ID (PID ， Process ID) 的号码。</li>
+<li>进程 ID 是按递增的顺序来分配的， init 进程的 PID 始终为 1 。</li>
+<li>内核也记录分配给每个进程的内存信息以及用来恢复运行的进程的就绪信息。</li>
+<li>和文件系统类似，进程系统中也存在所有者、用户ID 、有效用户ID 等。</li>
+</ol>
+<h3 id="使用-ps-命令来查看进程信息"><a href="#使用-ps-命令来查看进程信息" class="headerlink" title="使用 ps 命令来查看进程信息"></a>使用 ps 命令来查看进程信息</h3><ol>
+<li>ps 基本介绍</li>
+</ol>
+<ul>
+<li>用来查看进程信息的命令中 (有多个) ，使用最普遍的就是 ps 命令。 </li>
+<li>ps 命令有很多选项，其中最简单的使用格式如下：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ ps</span><br><span class="line">PID   TTY    Time     CMD</span><br><span class="line">5198  pts/1 00:00:00  bash</span><br><span class="line">10129 pts/1 00:00:00  ps</span><br></pre></td></tr></table></figure></li>
+<li>这个例子的输出结果列出了两个进程：进程 5198 和进程 10129 ，它们分别对应 bash 命令和 ps 命令。</li>
+<li>我们可以发现，默认情况下， ps 命令输出的信息并不是很多，只是输出和当前终端会话相关的进程信息。</li>
+<li>为了获取更多的信息，我们需要添加一些选项，但是在介绍这个之前，让我们先看看 ps 命令输出的其他字段信息。 </li>
+<li>TTY 是 teletype (电传打字机) 的缩写，代表了进程的控制终端 (controlling terminal) 。</li>
+<li>UNIX 在这里也显示了进程的运行时间， TIME 字段表示了进程消耗的 CPU 时间总和。</li>
+<li>如果在 ps 命令后面添加一个选项，那么我们将得到反映系统运行情况的更大的视图界面。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ ps x</span><br><span class="line">PID    TTY    STAT    TIME    COMMAND</span><br><span class="line">2799    ?      Ss1    0:00    /usr/libexec/bonbb-activation-server -ac</span><br><span class="line">2820    ?      S1     0:01    /usr/libexec/evolution-data=server-1.10 --</span><br><span class="line">15647   ?      Ss     0:00    /bin/sh /usr/bin/statkde</span><br><span class="line">15751   ?      Ss     0:00    /usr/bin-ssh-agent /usr/bin/dbus-lauch --</span><br><span class="line">15754   ?      S      0:00    /usr/bin/dbus-lauch --<span class="built_in">exit</span> -with-session</span><br><span class="line">15755   ?      Ss     0:01    /bin/dbus-daemon --fork --print-pid 4 -<span class="built_in">pr</span></span><br><span class="line">15774   ?      Ss     0:02    /usr/bin/gpg-agent -s -daemon</span><br><span class="line">15793   ?      S      0:00    start_kdeinit --new-starup + kcminit_start</span><br><span class="line">15794   ?      Ss     0:00    kdeinit Runing...</span><br><span class="line">15797   ?      S      0:00    dcopserver -nosid</span><br><span class="line"></span><br><span class="line">and many more...</span><br></pre></td></tr></table></figure></li>
+<li>添加 x 选项 (注意这里没有前置的连字符的连字符) 将告知 ps 命令显示所有的进程，而不需要关注它们是由哪个终端所控制。 </li>
+<li>TTY 列中出现的 ? 表示没有控制终端，使用这个选项可以查看所有进程的列表信息。</li>
+<li>把 ps 命令的输出作为 less 命令输入的方法通常很管用，它可以更方便地查看显示结果。</li>
+</ul>
+<ol start="2">
+<li>进程状态</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">状态</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">R</td>
+<td align="center">运行状态。进程正在运行或者准备运行</td>
+</tr>
+<tr>
+<td align="center">S</td>
+<td align="center">睡眠状态。进程不在运行，而是等待某时间发生，如果键盘输入或者收到网络报文。</td>
+</tr>
+<tr>
+<td align="center">D</td>
+<td align="center">不可中断的睡眠状态。进程正在等待 I&#x2F;O 操作，如应判断动</td>
+</tr>
+<tr>
+<td align="center">T</td>
+<td align="center">暂停状态。进程被指示</td>
+</tr>
+<tr>
+<td align="center">Z</td>
+<td align="center">无效或者僵尸进程。子进程被终止，但是还没有被其父进程彻底释放掉</td>
+</tr>
+<tr>
+<td align="center">&lt;</td>
+<td align="center">高优先级进程。进程可以被赋予更多的重要性，分配更多的 CPU 时间。进程的这一特性成为优先级 (niceiness) 。高优先级的进程被说成较不友好，是因为它将消耗更多的 CPU 时间，这样留给其他进程的 CPU 时间就会变少</td>
+</tr>
+<tr>
+<td align="center">N</td>
+<td align="center">低优先级。低优先级 (a nice process) 只有在其他更高优先级的进程使用完处理器后才能够获得试用处理器的时间</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>ps aux 指令</li>
+</ol>
+<ul>
+<li>ps 另一个常用的选项组合是 aux (不带前置连字符) ，它将输出更多的信息，如下所示。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ ps aux</span><br><span class="line">USER PID %CPU %MEM VSZ RSS TYY STAT START TIME COMMAND</span><br><span class="line">root 1    0.0 0.0  2136 644 ?  Ss   Mar05 0:31 init</span><br><span class="line">root 2    0.0 0.0  0    0   ?  S&lt;   Mar05 0:00 [kt]</span><br><span class="line">root 3    0.0 0.0  0    0   ?  S&lt;   Mar05 0:00 [mi]</span><br><span class="line">root 4    0.0 0.0  0    0   ?  S&lt;   Mar05 0:06 [ks]</span><br><span class="line">root 5    0.0 0.0  0    0   ?  S&lt;   Mar05 0:36 [wa]</span><br><span class="line">root 6    0.0 0.0  0    0   ?  S&lt;   Mar05 0:00 [ev]</span><br><span class="line">root 7    0.0 0.0  0    0   ?  S&lt;   Mar05 0:00 [kh]</span><br></pre></td></tr></table></figure></li>
+<li>该选项组合将会显示属于每个用户的进程信息，使用这些选项时不带前置连字符将使得命令以 BSD 模式 (BSD-style) 运行。</li>
+</ul>
+<ol start="4">
+<li>BSD 模式下 ps 命令输出的列标题</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">标题</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">USER</td>
+<td align="center">用户 ID：表示该进程的所有者</td>
+</tr>
+<tr>
+<td align="center">%CPU</td>
+<td align="center">CPU 使用百分比</td>
+</tr>
+<tr>
+<td align="center">%MEM</td>
+<td align="center">内存使用百分比</td>
+</tr>
+<tr>
+<td align="center">VSZ</td>
+<td align="center">虚拟耗用内存大小</td>
+</tr>
+<tr>
+<td align="center">RSS</td>
+<td align="center">实际使用的内存大小，进程使用的物理内存 (RAM) 大小 (以 KB 为单位)</td>
+</tr>
+<tr>
+<td align="center">START</td>
+<td align="center">进程开启的时间，如果数值超过 24 小时，那么将使用日期来表示</td>
+</tr>
+</tbody></table>
+<h3 id="使用-top-命令动态查看进程信息"><a href="#使用-top-命令动态查看进程信息" class="headerlink" title="使用 top 命令动态查看进程信息"></a>使用 top 命令动态查看进程信息</h3><ol>
+<li>top 基本介绍</li>
+</ol>
+<ul>
+<li>虽然 ps 命令可以显示有关机器运行情况的很多信息，但是它提供的只是在 ps 被执行时刻机器状态的一个快照。</li>
+<li>要查看机器运行情况的动态视图，我们可以使用 top 命令，如下所示：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ top</span><br></pre></td></tr></table></figure></li>
+<li>top 程序将按照进程活动的顺序，以列表的形式持续更新系统进程的当前信息 (默认每 3 秒更新一次) 。</li>
+<li>top 主要用于查看系统最高 (top) 进程的运行情况，其名字也来源于此。</li>
+<li>top 命令显示的内容包含两个部分，顶部显示的是系统总体状态信息，下面显示的是一张按 CPU 活动时间排序的进程情况表。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">top-14:59:20 up 6:30, 2users, load average: 0.07, 0.02, 0.00</span><br><span class="line">Tasks: 109 total, 1 running, 106 sleeping, 0 stopped, 2 zombie</span><br><span class="line">Cpu(s): 0.7%us, 1.0%sy, 0.0%ni, 98.3%<span class="built_in">id</span>, 0.0%wa, 0.0%hi, 0.0%si</span><br><span class="line">Mem: 319496k total, 314860k used, 4636k free, 19392k buff</span><br><span class="line">Swap: 875500k total, 149128k used, 726372k free, 114676k cach</span><br><span class="line"></span><br><span class="line">PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND</span><br><span class="line">6244 me 39 19 31752 3124 2188 S 6.3 1.0 16:24.42 trackerd</span><br><span class="line">11071 me 20 0 2304 1092 840 R 1.3 0.3 0:00.14 top</span><br><span class="line">6180 me 20 0 2700 1100 772 S 0.7 0.3 0:03.66 dbus-dae</span><br><span class="line">6321 me 20 0 20944 7248 6560 S 0.7 2.3 2:51.38 multiloa</span><br><span class="line">4955 root 20 0 104m 9668 5776 S 0.3 3.0 2:19.39 Xorg</span><br><span class="line">1 root 20 0 2976 528 476 S 0.0 0.2 0:03.14 init</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol start="2">
+<li>top 细节说明</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">行</th>
+<th align="center">字段</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">top</td>
+<td align="center">程序名</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">14:59:20</td>
+<td align="center">一天中的当前时间</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">up 6:30</td>
+<td align="center">正常运行时间 (uptime) 。从机器最后一次启动开始计算的时间总数。在这个例子中，系统已经运行了 6.5 小时。</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">2 users</td>
+<td align="center">有两个用户已登录</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">load average</td>
+<td align="center">负载均衡 (load average) 指的是等待运行的进程数；即共享 CPU 资源的处于可运行状态的进程数。显示的三个值分别对应不同的时间段：第一个对应的是前 60 秒的均值，下一个对应的是前 5 分钟的均值，最后一个对应的是前 15 分钟的均值。该值小于 1.0 表示该机器并不忙</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">task</td>
+<td align="center">统计进程数及各个进程的状态信息</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">0.7%us</td>
+<td align="center">0.7% 的 CPU 时间被用户进程占用，这里指的是处于内核外的进程</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">1.0%sy</td>
+<td align="center">1.0% 的 CPU 时间被系统进程 (内核进程) 占用</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">0.0%ni</td>
+<td align="center">0.0% 的 CPU 时间被友好进程 (低优先级进程) 占用</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">98.3%id</td>
+<td align="center">98.3% 的 cpu 时间是空闲的</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">0.0%wa</td>
+<td align="center">0.0% 的 CPU 时间用来等待 I&#x2F;O 操作</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">Mem</td>
+<td align="center">显示物理 RAM 的使用情况</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">Swap</td>
+<td align="center">显示交换空间 (虚拟内存) 的使用情况</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>top 补充说明</li>
+</ol>
+<ul>
+<li>top 程序可以接受许多键盘指令，其中最常用的有两个：一个是 h ，输入后将显示程序的帮助界面；另一个是 q ，用来退出 top 命令。</li>
+</ul>
+<h2 id="控制进程"><a href="#控制进程" class="headerlink" title="控制进程"></a>控制进程</h2><h3 id="基本介绍-1"><a href="#基本介绍-1" class="headerlink" title="基本介绍"></a>基本介绍</h3><ol>
+<li>xlogo 程序是由 X 窗口系统 (X Window System ，使得显示器支持图形化界面的底层引擎) ，提供的一个示例程序，他只是简单地显示一个包含 X 标识的可缩放窗口。</li>
+<li>首先，我们认识一下实验对象。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ xlogo</span><br></pre></td></tr></table></figure></li>
+<li>输入该命令后，包含该标识的一个小窗口将在屏幕的某个地方出现。有些系统中， xlogo 可能会输出一条告警信息，但是我们可以忽略它，因为它并不会造成什么影响。</li>
+<li>如果系统中不包含 xlogo 程序，那么试着使用 gedit 程序或者 kwrite 程序来替代。</li>
+<li>我们可以通过改变窗口的大小来验证 xlogo 是否处于运行状态。</li>
+<li>如果该表示适应新的窗口大小被重新绘制了，则表明该程序正在运行。</li>
+<li>如果关闭 xlogo 窗口，那么提示符将返回。</li>
+</ol>
+<h3 id="中断进程"><a href="#中断进程" class="headerlink" title="中断进程"></a>中断进程</h3><ol>
+<li>首先，输入 xlogo 命令，并确保程序在正常运行。接下来，返回到终端窗口，按下 Ctrl-C 键。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ xlogo</span><br><span class="line">[me@linuxbox ~]$ </span><br></pre></td></tr></table></figure></li>
+<li>在终端里按下 Ctrl-C 键会中断 (interrupt) 一个程序，它意味着我们委婉地请求程序结束。按下 Ctrl-C 键后， xlogo 窗口将关闭， shell 提示符将返回。</li>
+</ol>
+<h3 id="使进程在后台运行"><a href="#使进程在后台运行" class="headerlink" title="使进程在后台运行"></a>使进程在后台运行</h3><ol>
+<li>假设我们想要 shell 提示符返回，但又不终止 xlogo 程序，那么可以通过让该程序在后台 (background) 运行来实现。</li>
+<li>我们可以把终端想象为有一个前台 (foreground) 和一个后台。</li>
+<li>要想在启动程序时让该程序在后台运行，可以在命令后面加上和号字符 &amp; 来实现。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ xlogo &amp;</span><br><span class="line">[1] 28236</span><br><span class="line">[me@linuxbox ~]$</span><br></pre></td></tr></table></figure></li>
+<li>命令执行后，将出现 xlogo 窗口，而且 shell 提示符也可以返回，但是同时也会打印一些有趣的数字信息。</li>
+<li>这条信息是 shell 的一个称为作业控制 (job control) 的特性表现。</li>
+<li>shell 通过这条这条信息来显示已经启动的作业编号为 1([1]) , 其对应的 PID 是 28236 。</li>
+<li>如果执行 PS 命令，可以查看到当前运行的进程。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ PS</span><br><span class="line">PID    TTY     TIME   CMD</span><br><span class="line">10603  pts/1   0:00:00 bash</span><br><span class="line">28236  pts/1   0:00:00 xlogo</span><br><span class="line">28239  pts/1   0:00:00 ps</span><br></pre></td></tr></table></figure></li>
+<li>shell 的作业控制特性也提供了一种方式来查看从该终端启动的所有作业。</li>
+<li>使用 jobs 命令可以得到如下信息：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ <span class="built_in">jobs</span></span><br><span class="line">[1]+Running       xlogo &amp;</span><br></pre></td></tr></table></figure></li>
+<li>输出结果现实存在一个编号为 1 的作业在运行，而且对应命令是 xlogo &amp; 。</li>
+</ol>
+<h3 id="使进程回到前台运行"><a href="#使进程回到前台运行" class="headerlink" title="使进程回到前台运行"></a>使进程回到前台运行</h3><ol>
+<li>后台运行的进程不会收到任何键盘输入的影响，包括试图用来中断它的 Ctrl-C 键。要想是的进程返回到前台来运行，可以使用 fg 命令来实现，参见下面的例子。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ <span class="built_in">jobs</span></span><br><span class="line">[1]+Running       xlogo &amp;</span><br><span class="line">[me@linuxbox ~]$ <span class="built_in">fg</span> %1</span><br><span class="line">xlogo</span><br></pre></td></tr></table></figure></li>
+<li>我们可以通过在 fg 后面加上百分比符号和作业编号 (称为 jobspec 选项) 来实现这个功能。如果后台只有一个任务，那么可以不带 jobspec 选项，这时候按下 Ctrl-C 键就可以终止 xlogo 命令。</li>
+</ol>
+<h3 id="暂停进程"><a href="#暂停进程" class="headerlink" title="暂停进程"></a>暂停进程</h3><ol>
+<li>如果我们只是想要暂停进程，而不是终止进程，那么通常需要我们将前台运行的进程移到后台去运行。</li>
+<li>我们为了暂停前提进程需要按下 Ctrl-Z 键，让我们试试如下操作，在命令提示符后输入 xlogo ，按下 Enter 键后再按下 Ctrl-Z 键。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxboy ~]$ xlogo</span><br><span class="line">[1] + Stopped   xlogo</span><br></pre></td></tr></table></figure></li>
+<li>在暂停 xlogo 命令后，我们可以试图改变 xlogo 图口的大小来确认该程序是否被暂停了。</li>
+<li>我们可以使用 fg 命令让进程在前台恢复运行，也可以使用 bg 命令让进程移到后台运行：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxboy ~]$ <span class="built_in">bg</span> %1</span><br><span class="line">[1]+xlogo %</span><br><span class="line">[me@linuxboy ~]$ </span><br></pre></td></tr></table></figure></li>
+<li>在使用 fg 命令，如果只存在一个作业，那么可以不带 jobspec 选项。</li>
+<li>如果用命令方式启动了一个图形化程序，但是忘了在命令尾部加上 &amp; 符号来让程序在后台进行，那么在这种情况下，把进程从前台移到后台去运行的方法将非常方便。</li>
+</ol>
+<h2 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h2><h3 id="基本介绍-2"><a href="#基本介绍-2" class="headerlink" title="基本介绍"></a>基本介绍</h3><ol>
+<li>kill 命令通常用来杀死进程，它可以用来终止运行不正常的程序或者反过来拒绝终止的程序。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxboy ~]$ xlogo &amp;</span><br><span class="line">[1] 28401</span><br><span class="line">[me@linuxboy ~]$ <span class="built_in">kill</span> 28401</span><br><span class="line">[1]+Terminated        xlogo</span><br></pre></td></tr></table></figure></li>
+<li>我们首先在后台启动了 xlogo 程序， shell 将打印输出改后台进程的 jobspec 选项信息和 PID 信息。接着，我们使用了 kill 命令，并且指定想要终结进程的 PID 。我们也可以使用 jobspec 选项代替 PID 信息来指定该进程。</li>
+<li>信号是操作系统和程序间通信的多种方式之一，在使用 Ctrl-C 键和 Ctrl-Z 键时已经见识过信号的作用。当终端接收到其中的一个输入时，它将发送信号到前台进程。</li>
+<li>在按下 Ctrl-C 键的情况下，它发送一个称为 INT (中断，Interrupt) 的信号；在按下 Ctrl-Z 的情况下，它将发送一个称为 TSTP (中断暂停，Terminal Stop) 的信号。</li>
+</ol>
+<h3 id="使用-kill-命令发送信号到进程"><a href="#使用-kill-命令发送信号到进程" class="headerlink" title="使用 kill 命令发送信号到进程"></a>使用 kill 命令发送信号到进程</h3><ol>
+<li>kill 基本介绍</li>
+</ol>
+<ul>
+<li>kill 命令最常用的语法格式如下：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">kill</span> [-signal] PID...</span><br></pre></td></tr></table></figure></li>
+<li>如果命令行中没有指定信号，那么默认发送 TERM (Terminate) 信号。</li>
+</ul>
+<ol start="2">
+<li>kill 常用信号</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">信号编号</th>
+<th align="center">信号名</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">HUP</td>
+<td align="center">挂起信号。该信号用来指示程序控制终端已被挂起。该信号的效果通过关闭终端会话的方式来表现，运行在终端上的前台程序收到该信号后将终止。该信号也被很多后台程序用来进行重新初始化。这意味着，当一个后台进程接收到该信号时，它将重启并且重新读取它的配置文件。 Apache Web 服务器就是后台进程使用 HUP 信号重新初始化的一个例子</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">INT</td>
+<td align="center">中断信号。执行效果何在终端按下 Ctrl-C 键的效果一样。通常用来终止一个程序</td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="center">KILL</td>
+<td align="center">杀死信号。该信号比较特殊。鉴于程序可以选择不同的方式来处理发送过来的信号，包括忽略所有的这些信号，KILL 信号将不会真正意义上地被发送到目标程序。而是内核宁愿立即终止了该进程。当进程以这种方式被终止时，压根没有机会对它自己进行清理或者对当前工作进行保存。考虑到这个原因，KILL 信号只能当作其他的终端信号都执行失败的情况下的最后选择。</td>
+</tr>
+<tr>
+<td align="center">15</td>
+<td align="center">TREM</td>
+<td align="center">终止信号。这是 kill 命令默认发送的信号类型。如果程序仍然有足够的活力 (alive enough) 来接收信号，那么它将被终止</td>
+</tr>
+<tr>
+<td align="center">18</td>
+<td align="center">CONT</td>
+<td align="center">继续运行信号。恢复之前即接受了 STOP 信号的进程</td>
+</tr>
+<tr>
+<td align="center">19</td>
+<td align="center">STOP</td>
+<td align="center">暂停信号。该信号将使进程暂停，而不是终止。和 KILL 信号类似，该信号不会被发送给目标进程，因此它不能被忽略</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>kill 案例</li>
+</ol>
+<ul>
+<li>按照下面的方式使用 kill 命令。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxboy ~]$ xlogo &amp;</span><br><span class="line">[1] 13546</span><br><span class="line">[me@linuxboy ~]$ <span class="built_in">kill</span> -1 13546</span><br><span class="line">[1]+Hangup              xlogo</span><br></pre></td></tr></table></figure></li>
+<li>在这个例子中，我们首先在后台启动了 xlogo 程序，接着使用 kill 命令给它发送 HUP 信号。</li>
+<li>xlogo 程序将终止， shell 的输出信息表明了这个后台进程已经接收了一个挂起信号。你也许需要多敲几次 Enter 键才能看到这条输出信息。</li>
+<li>注意，你可以通过信号编号指定信号，其中包含带有 SIG 前缀的信号名。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ xlogo &amp;</span><br><span class="line">[1] 13601</span><br><span class="line">[me@linuxbox ~]$ <span class="built_in">kill</span> -INT 13601</span><br><span class="line">[1]+Interrupt       xlogo</span><br><span class="line">[me@linuxbox ~]$ xlogo &amp;</span><br><span class="line">[1] 13608</span><br><span class="line">[me@linuxbox ~]$ <span class="built_in">kill</span> -SIGINT 13608</span><br><span class="line">[1]+Interrupt            xlogo</span><br></pre></td></tr></table></figure></li>
+<li>和文件一样，进程也有所有者，只有进程的所有者 (或者超级用户) 才能使用 kill 命令来给它发送信号。</li>
+</ul>
+<ol start="4">
+<li>kill 其他常用信号</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">信号编号</th>
+<th align="center">信号名</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">3</td>
+<td align="center">QUIT</td>
+<td align="center">退出信息</td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="center">SEGV</td>
+<td align="center">段错误信号。如果程序非法使用了内存空间，即程序试图在没有写权限的空间执行写操作，那么系统将发送该信号。</td>
+</tr>
+<tr>
+<td align="center">20</td>
+<td align="center">TSTP</td>
+<td align="center">终端暂停信号。在按下 Ctrl-Z 键时终端将发出该信号。与 STOP 信号不同的是， TSTP 信号由程序接收，但是程序可以选择忽略该信号。</td>
+</tr>
+<tr>
+<td align="center">28</td>
+<td align="center">WHNCH</td>
+<td align="center">窗口改变信号。当窗口改变大小的时，系统将发送该信号。类似 top 和 less 的一些程序将会对该信号作出响应，重新绘制视图来适应新的窗口大小。</td>
+</tr>
+</tbody></table>
+<ol start="5">
+<li>kill 补充说明</li>
+</ol>
+<ul>
+<li>如果想要查看更多的信号，使用如下命令将显示完整的信号列表。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ <span class="built_in">kill</span> -l</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="使用-killall-命令发送信号给多个进程"><a href="#使用-killall-命令发送信号给多个进程" class="headerlink" title="使用 killall 命令发送信号给多个进程"></a>使用 killall 命令发送信号给多个进程</h3><ol>
+<li>killall 基本介绍</li>
+</ol>
+<ul>
+<li>通过使用 killall 命令，我们可以给指定程序或者指定用户名的多个进程发送信号。一般语法格式如下：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">killall [-u user] [-signal] name...</span><br></pre></td></tr></table></figure></li>
+<li>要证明这一点，我们可以先启动两个 xlogo 程序实例，然后终止它们。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[me@linuxbox ~]$ xlogo &amp;</span><br><span class="line">[1] 18801</span><br><span class="line">[me@linuxbox ~]$ xlogo &amp;</span><br><span class="line">[2] 18802</span><br><span class="line">[me@linuxbox ~]$ killall xlogo</span><br><span class="line">[1]-Terminated         xlogo</span><br><span class="line">[2]-Terminated         xlogo</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="更多与进程相关的命令"><a href="#更多与进程相关的命令" class="headerlink" title="更多与进程相关的命令"></a>更多与进程相关的命令</h2><table>
+<thead>
+<tr>
+<th align="center">命令</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">vmstat</td>
+<td align="center">输出系统资源使用情况的快照，包括内存，交换空间和磁盘 I&#x2F;O 。如果想要持续查看输出，可以在命令后面加上一个间隔时间 (以秒为单位) ，命令将按照间隔时间来动态更新显示的内容。按下 Ctrl-C 键可以终止输出。</td>
+</tr>
+<tr>
+<td align="center">tload</td>
+<td align="center">类似于 xload 程序，但是图形是在终端上绘制。按下 Ctrl-C 键终止输出。</td>
+</tr>
+</tbody></table>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul>
+<li>转载：Linux 命令行大全</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:330459539@qq.com">StudentCWZ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://studentcwz.github.io/post/cfd6444.html">https://studentcwz.github.io/post/cfd6444.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a></div><div class="post_share"><div class="social-share" data-image="/img/linux.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/49f62c41.html"><img class="prev-cover" src="/img/linux.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">第十八章 归档和备份</div></div></a></div><div class="next-post pull-right"><a href="/post/4d6da864.html"><img class="next-cover" src="/img/linux.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">第十三章 定制提示符</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/post/37c791b4.html" title="第一章 Shell 是什么"><img class="cover" src="/img/linux.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-27</div><div class="title">第一章 Shell 是什么</div></div></a></div><div><a href="/post/ffbaef4b.html" title="第七章 透过 Shell 看世界"><img class="cover" src="/img/linux.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-28</div><div class="title">第七章 透过 Shell 看世界</div></div></a></div><div><a href="/post/2cc576b7.html" title="第三章 Linux 基本系统"><img class="cover" src="/img/linux.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-27</div><div class="title">第三章 Linux 基本系统</div></div></a></div><div><a href="/post/b2b5d2f0.html" title="第二十三章 编译程序"><img class="cover" src="/img/linux.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-05</div><div class="title">第二十三章 编译程序</div></div></a></div><div><a href="/post/d9bb899a.html" title="第二十二章 打印"><img class="cover" src="/img/linux.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-05</div><div class="title">第二十二章 打印</div></div></a></div><div><a href="/post/3d3cca4.html" title="第二章 导航.md"><img class="cover" src="/img/linux.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-27</div><div class="title">第二章 导航.md</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div><div id="comment-switch"><span class="first-comment">Twikoo</span><span class="switch-btn"></span><span class="second-comment">Gitalk</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">StudentCWZ</div><div class="author-info__description">Golang and Python developer, always learning new things.</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">51</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">19</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/StudentCWZ"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://qq.com/" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="https://weixin.qq.com/" target="_blank" title="Wechat"><i class="fab fa-weixin"></i></a><a class="social-icon" href="https://mail.qq.com/" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://www.yinxiang.com/" target="_blank" title="Evernote"><i class="fa-brands fa-evernote"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Welcome to my Blog !</div><timing><div class="twopeople"></div></timing></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">第十章 进程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.2.</span> <span class="toc-text">进程如何工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.2.1.</span> <span class="toc-text">基本介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-ps-%E5%91%BD%E4%BB%A4%E6%9D%A5%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E4%BF%A1%E6%81%AF"><span class="toc-number">1.2.2.</span> <span class="toc-text">使用 ps 命令来查看进程信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-top-%E5%91%BD%E4%BB%A4%E5%8A%A8%E6%80%81%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E4%BF%A1%E6%81%AF"><span class="toc-number">1.2.3.</span> <span class="toc-text">使用 top 命令动态查看进程信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">控制进程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D-1"><span class="toc-number">1.3.1.</span> <span class="toc-text">基本介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.3.2.</span> <span class="toc-text">中断进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E8%BF%9B%E7%A8%8B%E5%9C%A8%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8C"><span class="toc-number">1.3.3.</span> <span class="toc-text">使进程在后台运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E8%BF%9B%E7%A8%8B%E5%9B%9E%E5%88%B0%E5%89%8D%E5%8F%B0%E8%BF%90%E8%A1%8C"><span class="toc-number">1.3.4.</span> <span class="toc-text">使进程回到前台运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9A%82%E5%81%9C%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.3.5.</span> <span class="toc-text">暂停进程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7"><span class="toc-number">1.4.</span> <span class="toc-text">信号</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D-2"><span class="toc-number">1.4.1.</span> <span class="toc-text">基本介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-kill-%E5%91%BD%E4%BB%A4%E5%8F%91%E9%80%81%E4%BF%A1%E5%8F%B7%E5%88%B0%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.4.2.</span> <span class="toc-text">使用 kill 命令发送信号到进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-killall-%E5%91%BD%E4%BB%A4%E5%8F%91%E9%80%81%E4%BF%A1%E5%8F%B7%E7%BB%99%E5%A4%9A%E4%B8%AA%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.4.3.</span> <span class="toc-text">使用 killall 命令发送信号给多个进程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E5%A4%9A%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-number">1.5.</span> <span class="toc-text">更多与进程相关的命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-number">1.6.</span> <span class="toc-text">参考文章</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/29c840ec.html" title="第二章 Golang 概述"><img src="/img/golang.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第二章 Golang 概述"/></a><div class="content"><a class="title" href="/post/29c840ec.html" title="第二章 Golang 概述">第二章 Golang 概述</a><time datetime="2022-05-11T07:00:59.189Z" title="Created 2022-05-11 15:00:59">2022-05-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/2db18b60.html" title="第一章 Golang 开山篇"><img src="/img/golang.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第一章 Golang 开山篇"/></a><div class="content"><a class="title" href="/post/2db18b60.html" title="第一章 Golang 开山篇">第一章 Golang 开山篇</a><time datetime="2022-05-11T06:46:35.270Z" title="Created 2022-05-11 14:46:35">2022-05-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/2f93ff5d.html" title="第十六章 网络"><img src="/img/linux.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第十六章 网络"/></a><div class="content"><a class="title" href="/post/2f93ff5d.html" title="第十六章 网络">第十六章 网络</a><time datetime="2022-05-05T00:33:30.068Z" title="Created 2022-05-05 08:33:30">2022-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/4decfb84.html" title="第十四章 软件包管理"><img src="/img/linux.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第十四章 软件包管理"/></a><div class="content"><a class="title" href="/post/4decfb84.html" title="第十四章 软件包管理">第十四章 软件包管理</a><time datetime="2022-05-05T00:33:30.068Z" title="Created 2022-05-05 08:33:30">2022-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/2421dd09.html" title="第十五章 存储介质"><img src="/img/linux.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第十五章 存储介质"/></a><div class="content"><a class="title" href="/post/2421dd09.html" title="第十五章 存储介质">第十五章 存储介质</a><time datetime="2022-05-05T00:33:30.068Z" title="Created 2022-05-05 08:33:30">2022-05-05</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 By StudentCWZ</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Toggle Between Traditional Chinese And Simplified Chinese">繁</button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Local search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (true){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-gilt-psi.vercel.app/',
+      region: 'ap-shanghai',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.vemoji)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-gilt-psi.vercel.app/',
+      region: 'ap-shanghai',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      document.getElementById('twikoo-count').innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script><script>function addGitalkSource () {
+  const ele = document.createElement('link')
+  ele.rel = 'stylesheet'
+  ele.href= 'https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css'
+  document.getElementsByTagName('head')[0].appendChild(ele)
+}
+
+function loadGitalk () {
+  function initGitalk () {
+    var gitalk = new Gitalk(Object.assign({
+      clientID: '339388df88d5b5d67362',
+      clientSecret: 'f7a589f837f79a63fb47efae87c7aca989ed1507',
+      repo: 'blog-comments',
+      owner: 'StudentCWZ',
+      admin: ['StudentCWZ'],
+      id: '18c8571783380b8eb5d5a344a830be3e',
+      updateCountCallback: commentCount
+    },null))
+
+    gitalk.render('gitalk-container')
+  }
+
+  if (typeof Gitalk === 'function') initGitalk()
+  else {
+    addGitalkSource()
+    getScript('https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js').then(initGitalk)
+  }
+}
+
+function commentCount(n){
+  let isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+  if (isCommentCount) {
+    isCommentCount.innerHTML= n
+  }
+}
+
+if ('Twikoo' === 'Gitalk' || !false) {
+  if (false) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+  else loadGitalk()
+} else {
+  function loadOtherComment () {
+    loadGitalk()
+  }
+}</script></div><script src="/js/jquery.min.js"></script><script src="/js/mouse_snow.js" defer></script><script src="/js/sakura.js" defer></script><script src="/js/timing.js" defer></script><script src="https://pv.sohu.com/cityjson?ie=utf-8" defer></script><script src="/js/ip_content.js" defer></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.16/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?StudentCWZ";
+            var git_color =['#ebedf0', '#f1f8ff', '#dbedff', '#c8e1ff', '#79b8ff', '#2188ff', '#0366d6', '#005cc5', '#044289', '#032f62', '#05264c'];
+            var git_user ="StudentCWZ";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style>undefined</style><script data-pjax>function history_calendar_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div>';
+                console.log('已挂载history_calendar')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            history_calendar_injector_config()
+        } </script><script data-pjax  src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script><script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="https://npm.elemecdn.com/hexo-butterfly-clock/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://npm.elemecdn.com/hexo-butterfly-clock/lib/clock.min.js"></script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="workboard"></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title=""><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v3.8.2" title=""><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/runtime.js"></script><!-- hexo injector body_end end --><script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body></html>

@@ -1,0 +1,806 @@
+<!DOCTYPE html><html lang="zh_TW" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>第二章 Golang 概述 | StudentCWZ 个人博客</title><meta name="keywords" content="Golang"><meta name="author" content="StudentCWZ,330459539@qq.com"><meta name="copyright" content="StudentCWZ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Golang 概述什么是程序 程序：为了让计算机执行某些操作或解决某个问题而编写的一系列有序指令集合。  为什么学习 Go 语言 Go 语言是区块链最主流的编程语言，同时也是当前最具发展潜力的语言。 Go 语言是由 Google 公司创造的语言，也是 Google 主推的语言。 国外如 Google、AWS、Cloudflare、CoreOS 等，国内如阿里、小米已经大规模使用 Golang 开发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第二章 Golang 概述">
+<meta property="og:url" content="https://studentcwz.github.io/post/29c840ec.html">
+<meta property="og:site_name" content="StudentCWZ 个人博客">
+<meta property="og:description" content="Golang 概述什么是程序 程序：为了让计算机执行某些操作或解决某个问题而编写的一系列有序指令集合。  为什么学习 Go 语言 Go 语言是区块链最主流的编程语言，同时也是当前最具发展潜力的语言。 Go 语言是由 Google 公司创造的语言，也是 Google 主推的语言。 国外如 Google、AWS、Cloudflare、CoreOS 等，国内如阿里、小米已经大规模使用 Golang 开发">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://studentcwz.github.io/img/golang.png">
+<meta property="article:published_time" content="2022-05-11T07:00:59.189Z">
+<meta property="article:modified_time" content="2022-05-11T07:07:13.732Z">
+<meta property="article:author" content="StudentCWZ">
+<meta property="article:tag" content="Golang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://studentcwz.github.io/img/golang.png"><link rel="shortcut icon" href="/img/favicon.jpeg"><link rel="canonical" href="https://studentcwz.github.io/post/29c840ec"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '第二章 Golang 概述',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-05-11 15:07:13'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 6 || hour >= 18
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/static-butterfly/dist/css/index.min.css"><link rel="stylesheet" href="/css/scroll.css"><link rel="stylesheet" href="/css/macblack.css"><link rel="stylesheet" href="/css/card.css"><link rel="stylesheet" href="/css/tag.css"><link rel="stylesheet" href="/css/mouse.css"><link rel="stylesheet" href="/css/footer.css"><link rel="stylesheet" href="/css/fonts.css"><link rel="stylesheet" href="/css/icons.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><link rel="stylesheet" href="/css/clock.min.css" /><link rel="stylesheet" href="/css/runtime.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">51</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">19</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/guide/"><i class="fa-fw fas fa-gift"></i><span> Guide</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/artitalk/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> Speak</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fa-fw fa fa-paper-plane"></i><span> Message</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/golang.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">StudentCWZ 个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/guide/"><i class="fa-fw fas fa-gift"></i><span> Guide</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/artitalk/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> Speak</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fa-fw fa fa-paper-plane"></i><span> Message</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">第二章 Golang 概述</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-05-11T07:00:59.189Z" title="Created 2022-05-11 15:00:59">2022-05-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-05-11T07:07:13.732Z" title="Updated 2022-05-11 15:07:13">2022-05-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Golang/">Golang</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">4.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>14min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="第二章 Golang 概述"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Golang-概述"><a href="#Golang-概述" class="headerlink" title="Golang 概述"></a>Golang 概述</h1><h2 id="什么是程序"><a href="#什么是程序" class="headerlink" title="什么是程序"></a>什么是程序</h2><ol>
+<li>程序：为了让计算机执行某些操作或解决某个问题而编写的一系列有序指令集合。</li>
+</ol>
+<h2 id="为什么学习-Go-语言"><a href="#为什么学习-Go-语言" class="headerlink" title="为什么学习 Go 语言"></a>为什么学习 Go 语言</h2><ol>
+<li>Go 语言是区块链最主流的编程语言，同时也是当前最具发展潜力的语言。</li>
+<li>Go 语言是由 Google 公司创造的语言，也是 Google 主推的语言。</li>
+<li>国外如 Google、AWS、Cloudflare、CoreOS 等，国内如阿里、小米已经大规模使用 Golang 开发其云计算相关产品。</li>
+</ol>
+<h2 id="Go-语言的核心开发团队"><a href="#Go-语言的核心开发团队" class="headerlink" title="Go 语言的核心开发团队"></a>Go 语言的核心开发团队</h2><ol>
+<li>Ken Thompson(肯·汤普森)：1983 年图灵奖和 1998 年美国国家技术奖得主。他与 Dennis Ritchie 是 Unix 的原创者。 Thompson 也发明了后来衍生出 C 语言的 B 程序语言，同时也是 C 语言的主要发明人。</li>
+<li>Rob Pike(罗布·派克)：曾是贝尔实验室的 Unix 团队，和 Plan 9 操作系统计划的成员。他与 Thompson 共事多年，并共创出广泛使用的 UTF-8 字元编码。</li>
+<li>Robert Griesemer：曾协助制作 Java 的 HotSpot 编译器，和 Chrome 浏览器的 JavaScript 引擎 V8。</li>
+</ol>
+<h2 id="Google-为什么创造-Go-语言"><a href="#Google-为什么创造-Go-语言" class="headerlink" title="Google 为什么创造 Go 语言"></a>Google 为什么创造 Go 语言</h2><ol>
+<li>计算机硬件技术更新频繁，性能提高很快。目前主流的编程语言发展明显落后于硬件，不能合理利用多核多 CPU 的优势提升软件系统性能。</li>
+<li>软件系统复杂度越来越高，维护成本越来越来高，目前缺乏一个足够简洁高效的编程语言。</li>
+<li>企业运行维护很多 C&#x2F;C++ 的项目， C&#x2F;C++ 程序运行速度虽然很快，但是编译速度确实很慢，同时还存在内存泄露的一系列的困扰需要解决。</li>
+</ol>
+<h2 id="Go-语言发展简史"><a href="#Go-语言发展简史" class="headerlink" title="Go 语言发展简史"></a>Go 语言发展简史</h2><ol>
+<li>2007 年，谷歌工程师 Rob Pike、Ken Thompson 和 Robert Griesemer 开始设计一门全新的语言，这是 Go 语言的最初原型。</li>
+<li>2009 年 11 月 10 日，Google 将 Go 语言以开放源代码的方式向全球发布。</li>
+<li>2015 年 8 月 19 日， Go 1.5 版发布，本次更新中移除了“最后残余的 C 代码”。</li>
+<li>2017 年 2 月 17 日， Go 语言 Go 1.8 版发布。</li>
+<li>2017 年 8 月 24 日， Go 语言 Go 1.9 版发布。</li>
+<li>2018 年 2 月 16 日， Go 语言 Go 1.10 版发布。</li>
+</ol>
+<h2 id="Go-语言的特点"><a href="#Go-语言的特点" class="headerlink" title="Go 语言的特点"></a>Go 语言的特点</h2><ol>
+<li><p>Go 语言保证了既能达到静态编译语言的安全和性能，又达到了动态语言开发维护的高效率，使用一个表达式来形容 Go 语言：Go &#x3D; C + Python ，说明 Go 语言既有 C 静态语言程序的运行速度，又能达到 Python 动态语言的快速开发。</p>
+</li>
+<li><p>从 C 语言中继承了很多理念，包括表达式语法，控制结构，基础数据类型，调用参数传值，指针等等，也保留了和 C 语言一样的编译执行方式及弱化指针。</p>
+</li>
+<li><p>引入包的概念，用于组织程序结构，Go 语言的一个文件都要归属一个包，而不能单独存在。</p>
+</li>
+<li><p>垃圾回收机制，内存自动回收，不需开发人员管理。</p>
+</li>
+<li><p>天然并发。</p>
+<ul>
+<li><p>从语言层面支持并发，实现简单</p>
+</li>
+<li><p>goroutine，轻量级线程，可实现大并发处理，高效利用多核</p>
+</li>
+<li><p>基于 CPS 并发模型实现</p>
+</li>
+</ul>
+</li>
+<li><p>吸收了管道通信机制，形成 Go 语言特有的管道 channel ，通过管道 channel ，可以实现不同的 goroute 之间的相互通信。</p>
+</li>
+<li><p>函数返回多个值。</p>
+</li>
+<li><p>新的创新：比如切片、延时执行 defer 等。</p>
+</li>
+</ol>
+<h2 id="Go-语言的开发工具"><a href="#Go-语言的开发工具" class="headerlink" title="Go 语言的开发工具"></a>Go 语言的开发工具</h2><h3 id="工具介绍"><a href="#工具介绍" class="headerlink" title="工具介绍"></a>工具介绍</h3><ol>
+<li>Visual studio code Microsoft 产品：一个运用于 Mac OS X、Windows 和 Linux 系统上的 IDE ，默认提供 Go 语言语法高亮，能安装 Go 语言插件，还可以支持智能提示，编译运行等功能。</li>
+<li>Sublime Text，可以免费试用，默认也支持 Go 代码语法高亮，只是保存次数达到一定数量之后就会提示是否购买，点击取消继续用，和正式注册版本没有任何区别。</li>
+<li>Vim：Vim 是从 Vi 发展出来的一个文本编辑器，代码补全、编译及错误跳转等方便编程的功能特别丰富，在程序员中被广泛使用。</li>
+<li>Emacs：Emacs 传说中的神器，它不仅仅是一个编辑器，因为功能强大，可称它为集成开发环境。</li>
+<li>Eclipse IDE 工具，开源免费，并提供 GoEclipse 插件。</li>
+<li>LiteIDE ，LiteIDE 是一款专门为 Go 语言开发的跨平台轻量级集成开发环境，是国人开发的。</li>
+<li>JetBrains 公司产品：Phpstrom 、WebStrom 和 PyCharm 等 IDE 工具，其中 Goland IDE 需要安装 GO 插件。</li>
+</ol>
+<h3 id="工具选择"><a href="#工具选择" class="headerlink" title="工具选择"></a>工具选择</h3><ol>
+<li>我们先选择用 Visual studio code 或者 vim 文本编辑器，到对 Go 语言有一定了解后，再使用 Eclipse 等 IDE 开发工具。</li>
+<li>这样更深刻的理解 Go 语言技术，培养代码感。</li>
+<li>有利于公司面试。</li>
+</ol>
+<h4 id="VSCode-的安装和使用"><a href="#VSCode-的安装和使用" class="headerlink" title="VSCode 的安装和使用"></a>VSCode 的安装和使用</h4><ol>
+<li><a href="!https://code.visualstudio.com/download">官方网址</a>。</li>
+<li>选择适合自己系统的 VSCode 软件。</li>
+</ol>
+<h5 id="Windows-下安装-VSCode"><a href="#Windows-下安装-VSCode" class="headerlink" title="Windows 下安装 VSCode"></a>Windows 下安装 VSCode</h5><ol>
+<li>首先查看自己电脑是 32 位还是 64 位系统，然后选择对应的 VSCode 下载。</li>
+<li>双击安装文件，就可以一步步安装。</li>
+</ol>
+<h5 id="Linux-下安装-VSCode"><a href="#Linux-下安装-VSCode" class="headerlink" title="Linux 下安装 VSCode"></a>Linux 下安装 VSCode</h5><ol>
+<li>先下载 Linux 版本的 VSCode 安装文件。</li>
+<li>这里使用的是虚拟机的 Ubuntu ，因此我需要先将 VSCode 安装文件传输到 Ubuntu 下。</li>
+<li>使用的是 xftp5 软件上传。</li>
+<li>如果你是在 Ubuntu 下做 go 开发，建议将 VSCode 安装到 &#x2F;opt 目录下。</li>
+<li>将 VSCode 安装文件拷贝到 &#x2F;opt 目录下。</li>
+<li>将 VSCode 安装文件解压：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf 安装文件</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>运行 VSCode</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./code</span><br></pre></td></tr></table></figure>
+
+<h5 id="Mac-下安装-VSCode"><a href="#Mac-下安装-VSCode" class="headerlink" title="Mac 下安装 VSCode"></a>Mac 下安装 VSCode</h5><ol>
+<li>下载 Mac 版本的 VSCode 安装文件。</li>
+<li>把 VSCode 安装文件传输到 Mac 系统。</li>
+<li>在默认情况下，Mac 没有启动 ssh 服务，所以需要我们手动开启，才能远程传输文件。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(1) 启动sshd服务：</span><br><span class="line">sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist</span><br><span class="line">(2) 停止sshd服务：</span><br><span class="line">sudo launchctl unload -w /System/Library/LaunchDaemons/ssh.plist</span><br><span class="line">(3) 查看是否启动：</span><br><span class="line">sudo launchtrl list | grep ssh</span><br><span class="line">(4) 看到下面的输出表示成功启动了</span><br><span class="line">- 0 com.openssh.sshd</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>将 VSCode 安装文件解压后，即可使用。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip 安装文件</span><br></pre></td></tr></table></figure>
+
+<h2 id="Go-语言开发环境搭建"><a href="#Go-语言开发环境搭建" class="headerlink" title="Go 语言开发环境搭建"></a>Go 语言开发环境搭建</h2><h3 id="Windows-下搭建-Go-开发环境-安装和配置"><a href="#Windows-下搭建-Go-开发环境-安装和配置" class="headerlink" title="Windows 下搭建 Go 开发环境-安装和配置"></a>Windows 下搭建 Go 开发环境-安装和配置</h3><h4 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h4><ol>
+<li>SDK 的全称(Software Development Kit，软件开发工具包)。</li>
+<li>SDK 是提供给开发人员使用的，其中包含了对应开发语言的工具包。</li>
+</ol>
+<h4 id="SDK-下载"><a href="#SDK-下载" class="headerlink" title="SDK 下载"></a>SDK 下载</h4><ol>
+<li>Go 语言的<a href="!https://golang.org/dl/">官网</a>，因为种种原因，可能无法访问。</li>
+<li><a href="!https://studygolang.com/dl">SDK 下载地址</a>。</li>
+</ol>
+<h4 id="SDK-安装"><a href="#SDK-安装" class="headerlink" title="SDK 安装"></a>SDK 安装</h4><ol>
+<li><p>Windows 下 SDK 的各个版本说明：</p>
+<ul>
+<li><p>Windows 下：根据自己系统是 32 位还是 64 位进行下载。</p>
+</li>
+<li><p>32 位系统：go1.15.2.windows-386.zip</p>
+</li>
+<li><p>64 位系统：go1.15.2.windows-amd64.zip</p>
+</li>
+</ul>
+</li>
+<li><p>请注意：安装路径不要有中文或者特殊符号如空格等。</p>
+</li>
+<li><p>SDK 安装目录建议： Windows 一般安装在 d:&#x2F;programs 。</p>
+</li>
+<li><p>安装时，基本是傻瓜式安装，解压就可以使用。</p>
+</li>
+<li><p>解压后，会得到 d:&#x2F;go 目录，这个是 SDK 。</p>
+</li>
+</ol>
+<h4 id="Windows-下配置-Golang-环境变量"><a href="#Windows-下配置-Golang-环境变量" class="headerlink" title="Windows 下配置 Golang 环境变量"></a>Windows 下配置 Golang 环境变量</h4><h5 id="为什么要配置环境变量"><a href="#为什么要配置环境变量" class="headerlink" title="为什么要配置环境变量"></a>为什么要配置环境变量</h5><ol>
+<li>在 dos 命令行中敲 go ，出现错误提示。</li>
+<li>原因分析：当前执行的程序在当前目录下如果不存在，Windows 系统会在系统中已有的一个名为 path 的环境变量指定的目录中查找。如果仍未找到，会出现以上的错误提示。所以进入到 go 安装路径 \bin 目录下，执行 go，会看到 go 参数提示信息。</li>
+</ol>
+<h5 id="配置环境变量介绍"><a href="#配置环境变量介绍" class="headerlink" title="配置环境变量介绍"></a>配置环境变量介绍</h5><ol>
+<li>根据 Windows 系统在查找可执行程序的原理，可以将 Go 所在路径定义到环境变量中，让系统帮我们去找运行执行的程序，这样在任何目录下都可执行 go 指令。</li>
+</ol>
+<h5 id="配置哪些环境变量"><a href="#配置哪些环境变量" class="headerlink" title="配置哪些环境变量"></a>配置哪些环境变量</h5><table>
+<thead>
+<tr>
+<th>环境变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>GOROOT</strong></td>
+<td>指定 SDK 的安装路径</td>
+</tr>
+<tr>
+<td><strong>Path</strong></td>
+<td>添加 SDK 的 &#x2F;bin 目录</td>
+</tr>
+<tr>
+<td><strong>GOPATH</strong></td>
+<td>工作目录</td>
+</tr>
+</tbody></table>
+<h5 id="Windows-下配置-Golang-环境变量过程"><a href="#Windows-下配置-Golang-环境变量过程" class="headerlink" title="Windows 下配置 Golang 环境变量过程"></a>Windows 下配置 Golang 环境变量过程</h5><ol>
+<li><p>先打开环境变量配置界面：</p>
+<ul>
+<li>计算机 -&gt; 属性 -&gt; 高级系统设置 -&gt; 系统变量</li>
+</ul>
+</li>
+<li><p>配置环境变量</p>
+<ul>
+<li><p>系统变量 -&gt; 新建</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GOROOT</span><br><span class="line">D:\programfiles\go</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>系统变量 -&gt; path -&gt; 编辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">;%GOROOT%\bin</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>系统变量 -&gt; 新建</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GOPATH</span><br><span class="line">D:\goproject</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<h3 id="Linux-下搭建-Go-开发环境-安装和配置-SDK"><a href="#Linux-下搭建-Go-开发环境-安装和配置-SDK" class="headerlink" title="Linux 下搭建 Go 开发环境-安装和配置 SDK"></a>Linux 下搭建 Go 开发环境-安装和配置 SDK</h3><h4 id="Linux-下-SDK-安装"><a href="#Linux-下-SDK-安装" class="headerlink" title="Linux 下 SDK 安装"></a>Linux 下 SDK 安装</h4><ol>
+<li><p>Linux 下 SDK 的各个版本说明：</p>
+<ul>
+<li><p>Linux 下：根据系统是 32 位还是 64 位进行下载。</p>
+</li>
+<li><p>32 位系统：go.1.15.2.linux-386.tar.gz</p>
+</li>
+<li><p>64 位系统：go.1.15.2.linux-amd64.tar.gz</p>
+</li>
+</ul>
+</li>
+<li><p>请注意：安装路径不要有中文或者特殊符号如空格等。</p>
+</li>
+<li><p>SDK 安装目录建议：Linux 放在 &#x2F;opt 目录下。</p>
+</li>
+<li><p>安装时，解压即可。</p>
+</li>
+<li><p>详细步骤：</p>
+<ul>
+<li><p>将 SDK 安装文件传输到 ubuntu</p>
+</li>
+<li><p>将 SDK 安装文件拷贝到 &#x2F;opt 目录下</p>
+</li>
+<li><p>解压缩文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf 安装文件</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<h4 id="Linux-下配置-Golang-环境变量过程"><a href="#Linux-下配置-Golang-环境变量过程" class="headerlink" title="Linux 下配置 Golang 环境变量过程"></a>Linux 下配置 Golang 环境变量过程</h4><ol>
+<li>在 &#x2F;etc&#x2F;profile 文件下添加三条语句</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> GOROOT=/opt/go</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$GOROOT</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> GOPATH=<span class="variable">$HOME</span>/goproject</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>提示：修改 &#x2F;etc&#x2F;profile 文件，需要 root 权限。</li>
+</ol>
+<h3 id="Mac-下搭建-Go-开发环境-安装和配置-SDK"><a href="#Mac-下搭建-Go-开发环境-安装和配置-SDK" class="headerlink" title="Mac 下搭建 Go 开发环境-安装和配置 SDK"></a>Mac 下搭建 Go 开发环境-安装和配置 SDK</h3><h4 id="Mac-下-SDK-安装"><a href="#Mac-下-SDK-安装" class="headerlink" title="Mac 下 SDK 安装"></a>Mac 下 SDK 安装</h4><ol>
+<li><p>Mac 下 SDK 的各个版本说明：</p>
+<ul>
+<li><p>Mac OS 下：只有 64 位的软件安装包</p>
+</li>
+<li><p>Mac OS 系统的安装包：go1.15.2.darwin-amd64.tar.gz</p>
+</li>
+</ul>
+</li>
+<li><p>请注意：安装路径不要有中文或者特殊符号如空格等。</p>
+</li>
+<li><p>SDK 安装目录建议：Mac 一般放在用户目录下 go_dev&#x2F;go 下</p>
+</li>
+<li><p>安装时，解压即可。</p>
+</li>
+<li><p>详细步骤：</p>
+<ul>
+<li><p>先将安装文件上传到 Mac 系统</p>
+</li>
+<li><p>在用户目录下创建目录 go_dev ，将上传的安装文件移动到 go_dev 下</p>
+</li>
+<li><p>解压安装文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf 安装文件</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<h4 id="Mac-下配置-Golang-环境变量"><a href="#Mac-下配置-Golang-环境变量" class="headerlink" title="Mac 下配置 Golang 环境变量"></a>Mac 下配置 Golang 环境变量</h4><ol>
+<li>在 &#x2F;etc&#x2F;profile 文件下添加三条语句</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> GOROOT=<span class="variable">$HOME</span>/go_dev/go</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$GOROOT</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> GOPATH=<span class="variable">$HOME</span>/goproject</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>提示：修改 &#x2F;etc&#x2F;profile 文件，需要 root 权限。</li>
+</ol>
+<h2 id="Go-语言的开发步骤"><a href="#Go-语言的开发步骤" class="headerlink" title="Go 语言的开发步骤"></a>Go 语言的开发步骤</h2><h3 id="Windows-下开发步骤"><a href="#Windows-下开发步骤" class="headerlink" title="Windows 下开发步骤"></a>Windows 下开发步骤</h3><ol>
+<li>安装 Windows 版本 VSCode 。</li>
+<li>将 Go 代码编写到扩展名为 hello.go 的文件中。</li>
+<li>目录结构：源码一般在工作目录 src&#x2F;go_code 下。</li>
+<li>通过 go build 命令对该 go 文件进行编译，生成 .exe 文件。</li>
+<li>在 dos 命令行下执行 .exe 文件就可以看到运行效果。</li>
+<li>注意：通过 go run 命令可以直接运行 hello.go 程序。[类似执行一个脚本的形式]</li>
+</ol>
+<h3 id="Linux-下开发步骤"><a href="#Linux-下开发步骤" class="headerlink" title="Linux 下开发步骤"></a>Linux 下开发步骤</h3><ol>
+<li>说明：Linux 下开发 go 和 Windows 开发基本是一样的。只是在运行可执行的程序时是以.&#x2F;文件名方式。</li>
+<li>安装 Ubuntu 版本 VSCode ，或者直接使用 Vim 开发。</li>
+<li>将 Go 代码编写到扩展名为 hello.go 的文件中。</li>
+<li>通过 go build 命令对该 go 文件进行编译，生成可执行文件 hello 。</li>
+<li>在终端执行 .&#x2F;hello 就可以看到运行效果。</li>
+<li>注意：通过 go run 命令可以直接运行 hello.go 程序。</li>
+</ol>
+<h3 id="Mac-下开发步骤"><a href="#Mac-下开发步骤" class="headerlink" title="Mac 下开发步骤"></a>Mac 下开发步骤</h3><ol>
+<li>说明：在 Mac 下开发 go 程序和 Windows 基本一样。</li>
+</ol>
+<h2 id="Golang-执行流程分析"><a href="#Golang-执行流程分析" class="headerlink" title="Golang 执行流程分析"></a>Golang 执行流程分析</h2><ol>
+<li><p>.go 文件 -&gt; go build(编译) -&gt; 可执行文件 -&gt; 运行 -&gt; 结果</p>
+</li>
+<li><p>.go 文件 -&gt; go run(编译运行一步) -&gt; 结果</p>
+</li>
+<li><p>两种执行流程的方式区别说明：</p>
+<ul>
+<li><p>如果我们先编译生成了可执行文件，那么我们可以将该可执行文件拷贝到没有 go 开发环境的机器上，仍然可以运行。</p>
+</li>
+<li><p>如果我们是直接 go run 源代码，那么如果在另一个机器上这么运行，也需要 go 开发环境，否则无法执行。</p>
+</li>
+<li><p>在编译时，编译器会将程序运行依赖的库文件包含在可执行文件中，所有，可执行文件变大了很多。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="什么是编译"><a href="#什么是编译" class="headerlink" title="什么是编译"></a>什么是编译</h3><ol>
+<li>有了 go 源文件，通过编译器将其编译成机器可以识别的二进码文件。</li>
+<li>在该源文件目录下，通过 go build 对 hello.go 文件进行编译。可以指定生成的可执行文件名，Windows 下，必须是 .exe 后缀。</li>
+<li>如果程序没有错误，没有任何提示，会在当前目录下出现一个可执行文件，该文件是二进码文件，也是可以执行的文件。</li>
+<li>如果程序有错误，编译时，会在错误的那行报错。</li>
+</ol>
+<h3 id="什么是运行"><a href="#什么是运行" class="headerlink" title="什么是运行"></a>什么是运行</h3><ol>
+<li>直接运行的可执行 Go 程序，比如 hello.exe 。</li>
+<li>通过运行工具 go run 对可执行文件进行执行。</li>
+</ol>
+<h2 id="Go-程序开发注意事项"><a href="#Go-程序开发注意事项" class="headerlink" title="Go 程序开发注意事项"></a>Go 程序开发注意事项</h2><ol>
+<li>Go 源文件以 go 为扩展名。</li>
+<li>Go 应用程序的执行入口是 main() 方法</li>
+<li>Go 语言严格区分大小写</li>
+<li>Go 方法由一条条语句构成，每个语句后不需要分号，这体现了 Golang 的简洁性。</li>
+<li>Go 编译器是一行行进行编译的，因此我们一行就写一条语句，不能把多条语句写在同一个，负责报错。</li>
+<li>Go 语言定义的变量或者 import 的包如果没有使用到，代码不能编译通过。</li>
+<li>大括号都是成对出现的，缺一不可。</li>
+</ol>
+<h2 id="Golang-常用的转义字符"><a href="#Golang-常用的转义字符" class="headerlink" title="Golang 常用的转义字符"></a>Golang 常用的转义字符</h2><ol>
+<li>\t: 一个制表位，实现对齐的功能</li>
+<li>\n: 换行符</li>
+<li>\: 一个 \</li>
+<li>\“: 一个 “</li>
+<li>\r: 一个回车</li>
+</ol>
+<h2 id="Golang-开发常见问题和解决方法"><a href="#Golang-开发常见问题和解决方法" class="headerlink" title="Golang 开发常见问题和解决方法"></a>Golang 开发常见问题和解决方法</h2><ol>
+<li><p>找不到文件</p>
+<ul>
+<li>解决方法: 源文件不存在或者写错，或者当前路径错误。</li>
+</ul>
+</li>
+<li><p>小结和提示</p>
+<ul>
+<li><p>学习编程最容易犯的错误是语法错误。Go 要求你必须按照语法规则编写代码。如果你的程序违反了语法规则，例如：忘记了大括号、引号，或者拼错了单词，Go 编译器都会报语法错误。</p>
+</li>
+<li><p>要求：尝试着去看懂编译器会报告的错误信息。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><ol>
+<li>用于注解说明解释程序的文字就是注释，注释提高了代码的阅读性。</li>
+<li>注释是一个程序员必须要具有的良好编程习惯。</li>
+<li>将自己的思想通过注释先整理出来，再用代码去实现。</li>
+</ol>
+<h3 id="Go-语言中的注释类型"><a href="#Go-语言中的注释类型" class="headerlink" title="Go 语言中的注释类型"></a>Go 语言中的注释类型</h3><ol>
+<li><p>Go 支持 C 语言风格的&#x2F;* *&#x2F;块注释，也支持 C++ 风格的&#x2F;&#x2F;行注释。</p>
+</li>
+<li><p>行注释更通用，块注释主要用于针对包的详细说明或者屏蔽大块的代码。</p>
+<ul>
+<li><p>行注释</p>
+</li>
+<li><p>块注释(多行注释)</p>
+</li>
+</ul>
+</li>
+<li><p>使用细节</p>
+<ul>
+<li><p>对于行注释和块注释，被注释的文字，不会被 Go 编译器执行。</p>
+</li>
+<li><p>块注释里面不允许有块注释嵌套。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="规范的代码风格"><a href="#规范的代码风格" class="headerlink" title="规范的代码风格"></a>规范的代码风格</h3><h4 id="正确的注释和注释风格"><a href="#正确的注释和注释风格" class="headerlink" title="正确的注释和注释风格"></a>正确的注释和注释风格</h4><ol>
+<li>Go 官方推荐使用行注释来注释整个方法和语句。</li>
+<li>看源码。</li>
+</ol>
+<h4 id="正确的缩进和空白"><a href="#正确的缩进和空白" class="headerlink" title="正确的缩进和空白"></a>正确的缩进和空白</h4><ol>
+<li>使用一次 tab 操作，实现缩进，默认整体向右边移动，可以用 shift+tab 整体向左移。</li>
+<li>或者使用 gofmt 来进行格式化。</li>
+<li>运算符两边习惯性各加一个空格。</li>
+<li>一行最长不超过 80 个字符，超过的请使用换行展示，尽量保持格式优雅。</li>
+</ol>
+<h2 id="Golang-官方编程指南"><a href="#Golang-官方编程指南" class="headerlink" title="Golang 官方编程指南"></a>Golang 官方编程指南</h2><ol>
+<li><a href="!https://golang.org/">Golang 官方网站</a>。</li>
+<li><a href="!http://golang.org/pkg">Golang 官方标准库 API 文档</a>，可以查看 Golang 所有包下的函数和使用。</li>
+<li>API：Application Program Interface(应用程序编程接口)，就是我们 Go 的各个包下的各个函数</li>
+</ol>
+<h3 id="Golang-标准库-API-文档"><a href="#Golang-标准库-API-文档" class="headerlink" title="Golang 标准库 API 文档"></a>Golang 标准库 API 文档</h3><ol>
+<li>API 是 Golang 提供的基本编程接口。</li>
+<li>Go 语言提供了大量的标准库，因此 Google 公司也为这些标准库提供了相应的 API 文档，用于告诉开发者如何使用这些标准库，以及标准库包含的方法。</li>
+<li><a target="_blank" rel="noopener" href="https://studygolang.com/pkgdoc">Golang 中文网的在线标准库文档</a>。</li>
+</ol>
+<h2 id="Dos-常用指令"><a href="#Dos-常用指令" class="headerlink" title="Dos 常用指令"></a>Dos 常用指令</h2><h3 id="Dos-的基本介绍"><a href="#Dos-的基本介绍" class="headerlink" title="Dos 的基本介绍"></a>Dos 的基本介绍</h3><ol>
+<li>Dos：Disk Operating System 磁盘操作系统。</li>
+</ol>
+<h3 id="Dos-操作原理"><a href="#Dos-操作原理" class="headerlink" title="Dos 操作原理"></a>Dos 操作原理</h3><ol>
+<li>cmd 发送指令 -&gt; Dos 操作系统 -&gt; Windows 的目录操作</li>
+</ol>
+<h3 id="目录操作指令"><a href="#目录操作指令" class="headerlink" title="目录操作指令"></a>目录操作指令</h3><ol>
+<li>查看当前目录</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D:\&gt;<span class="built_in">dir</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>切换到其他盘</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D:\&gt;<span class="built_in">cd</span> /d f:</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>切换到当前盘的其他目录下(相对路径和绝对路径的区别)</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">D:\&gt;<span class="built_in">cd</span> d:\test100     <span class="comment"># 绝对路径切换</span></span><br><span class="line">d:\test100&gt;</span><br><span class="line">d:\test100&gt;<span class="built_in">cd</span> adc100  <span class="comment"># 相对路径切换</span></span><br><span class="line">d:\test100\abc100&gt;</span><br><span class="line">d:\test100\abc100&gt;<span class="built_in">cd</span> d:\test100 <span class="comment"># 绝对路径切换</span></span><br><span class="line">d:\test100&gt;<span class="built_in">cd</span> d:\test100\abc100 <span class="comment"># 绝对路径切换</span></span><br><span class="line">d:\test100\abc100&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>切换到上一级目录</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">d:\test100\abc100&gt;<span class="built_in">cd</span> ..</span><br><span class="line">d:\test100&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>切换到根目录</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">d:\test100&gt;<span class="built_in">cd</span> \</span><br><span class="line">d:\&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>新建目录 md</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">d:\&gt;<span class="built_in">cd</span> test200</span><br><span class="line">d:\test200&gt;md ok200</span><br><span class="line">d:\test200&gt;md ok300 ok400 <span class="comment"># 新建多个目录</span></span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>删除空目录</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">d:\test200&gt;rd ok100</span><br><span class="line">d:\test200&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>删除目录以及下面的下面的子目录和文件，不带询问</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">d:\test200&gt;rd /q/s ok200</span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li>删除目录以及下面的子目录和文件，带询问</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">d:\test200&gt;rd /s ok300</span><br></pre></td></tr></table></figure>
+
+<ol start="10">
+<li>新建或追加内容到文件</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">d:\test200&gt;<span class="built_in">echo</span> hello &gt; d:\test100\abc.txt</span><br><span class="line">d:\test200&gt;</span><br><span class="line">d:\test200&gt;<span class="built_in">cd</span> d:\test100\abc</span><br><span class="line">d:\test200\abc100&gt;</span><br><span class="line">d:\test200\abc100&gt;<span class="built_in">echo</span> atguigu &gt; abc2.txt</span><br><span class="line">d:\test200\abc100&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="11">
+<li>复制文件</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">d:\test200\abc100&gt;copy abc.txt d:\test200</span><br><span class="line">d:\test200\abc100&gt;copy abc.txt d:\test200\ok.txt <span class="comment"># 复制并改名</span></span><br></pre></td></tr></table></figure>
+
+<ol start="12">
+<li>移动文件</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">d:\test100\abc100&gt;move abc.txt f:\</span><br></pre></td></tr></table></figure>
+
+<ol start="13">
+<li>删除文件</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">d:\test100\abc100&gt;del abc2.txt</span><br><span class="line">d:\test100\abc100&gt;del *.txt <span class="comment"># 删除所有带 .txt 后缀文件</span></span><br></pre></td></tr></table></figure>
+
+<ol start="14">
+<li>清屏</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cls</span><br></pre></td></tr></table></figure>
+
+<ol start="15">
+<li>退出 Dos</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="课程来源"><a href="#课程来源" class="headerlink" title="课程来源"></a>课程来源</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://www.atguigu.com/download_detail.shtml?v=232">尚硅谷 Go 核心编程</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:330459539@qq.com">StudentCWZ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://studentcwz.github.io/post/29c840ec.html">https://studentcwz.github.io/post/29c840ec.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Golang/">Golang</a></div><div class="post_share"><div class="social-share" data-image="/img/golang.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/post/2db18b60.html"><img class="next-cover" src="/img/golang.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">第一章 Golang 开山篇</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/post/67a9606f.html" title="Mac 平台安装 Go 环境"><img class="cover" src="/img/mac.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-26</div><div class="title">Mac 平台安装 Go 环境</div></div></a></div><div><a href="/post/2db18b60.html" title="第一章 Golang 开山篇"><img class="cover" src="/img/golang.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-11</div><div class="title">第一章 Golang 开山篇</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div><div id="comment-switch"><span class="first-comment">Twikoo</span><span class="switch-btn"></span><span class="second-comment">Gitalk</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">StudentCWZ</div><div class="author-info__description">Golang and Python developer, always learning new things.</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">51</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">19</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/StudentCWZ"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://qq.com/" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="https://weixin.qq.com/" target="_blank" title="Wechat"><i class="fab fa-weixin"></i></a><a class="social-icon" href="https://mail.qq.com/" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://www.yinxiang.com/" target="_blank" title="Evernote"><i class="fa-brands fa-evernote"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Welcome to my Blog !</div><timing><div class="twopeople"></div></timing></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Golang-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">Golang 概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.1.</span> <span class="toc-text">什么是程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AD%A6%E4%B9%A0-Go-%E8%AF%AD%E8%A8%80"><span class="toc-number">1.2.</span> <span class="toc-text">为什么学习 Go 语言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-%E8%AF%AD%E8%A8%80%E7%9A%84%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91%E5%9B%A2%E9%98%9F"><span class="toc-number">1.3.</span> <span class="toc-text">Go 语言的核心开发团队</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Google-%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%9B%E9%80%A0-Go-%E8%AF%AD%E8%A8%80"><span class="toc-number">1.4.</span> <span class="toc-text">Google 为什么创造 Go 语言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-%E8%AF%AD%E8%A8%80%E5%8F%91%E5%B1%95%E7%AE%80%E5%8F%B2"><span class="toc-number">1.5.</span> <span class="toc-text">Go 语言发展简史</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-%E8%AF%AD%E8%A8%80%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-number">1.6.</span> <span class="toc-text">Go 语言的特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-%E8%AF%AD%E8%A8%80%E7%9A%84%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7"><span class="toc-number">1.7.</span> <span class="toc-text">Go 语言的开发工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.7.1.</span> <span class="toc-text">工具介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E9%80%89%E6%8B%A9"><span class="toc-number">1.7.2.</span> <span class="toc-text">工具选择</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#VSCode-%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="toc-number">1.7.2.1.</span> <span class="toc-text">VSCode 的安装和使用</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Windows-%E4%B8%8B%E5%AE%89%E8%A3%85-VSCode"><span class="toc-number">1.7.2.1.1.</span> <span class="toc-text">Windows 下安装 VSCode</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Linux-%E4%B8%8B%E5%AE%89%E8%A3%85-VSCode"><span class="toc-number">1.7.2.1.2.</span> <span class="toc-text">Linux 下安装 VSCode</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Mac-%E4%B8%8B%E5%AE%89%E8%A3%85-VSCode"><span class="toc-number">1.7.2.1.3.</span> <span class="toc-text">Mac 下安装 VSCode</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">1.8.</span> <span class="toc-text">Go 语言开发环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows-%E4%B8%8B%E6%90%AD%E5%BB%BA-Go-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83-%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE"><span class="toc-number">1.8.1.</span> <span class="toc-text">Windows 下搭建 Go 开发环境-安装和配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.8.1.1.</span> <span class="toc-text">基本介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SDK-%E4%B8%8B%E8%BD%BD"><span class="toc-number">1.8.1.2.</span> <span class="toc-text">SDK 下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SDK-%E5%AE%89%E8%A3%85"><span class="toc-number">1.8.1.3.</span> <span class="toc-text">SDK 安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Windows-%E4%B8%8B%E9%85%8D%E7%BD%AE-Golang-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">1.8.1.4.</span> <span class="toc-text">Windows 下配置 Golang 环境变量</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">1.8.1.4.1.</span> <span class="toc-text">为什么要配置环境变量</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.8.1.4.2.</span> <span class="toc-text">配置环境变量介绍</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E5%93%AA%E4%BA%9B%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">1.8.1.4.3.</span> <span class="toc-text">配置哪些环境变量</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Windows-%E4%B8%8B%E9%85%8D%E7%BD%AE-Golang-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E8%BF%87%E7%A8%8B"><span class="toc-number">1.8.1.4.4.</span> <span class="toc-text">Windows 下配置 Golang 环境变量过程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux-%E4%B8%8B%E6%90%AD%E5%BB%BA-Go-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83-%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE-SDK"><span class="toc-number">1.8.2.</span> <span class="toc-text">Linux 下搭建 Go 开发环境-安装和配置 SDK</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux-%E4%B8%8B-SDK-%E5%AE%89%E8%A3%85"><span class="toc-number">1.8.2.1.</span> <span class="toc-text">Linux 下 SDK 安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux-%E4%B8%8B%E9%85%8D%E7%BD%AE-Golang-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E8%BF%87%E7%A8%8B"><span class="toc-number">1.8.2.2.</span> <span class="toc-text">Linux 下配置 Golang 环境变量过程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mac-%E4%B8%8B%E6%90%AD%E5%BB%BA-Go-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83-%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE-SDK"><span class="toc-number">1.8.3.</span> <span class="toc-text">Mac 下搭建 Go 开发环境-安装和配置 SDK</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Mac-%E4%B8%8B-SDK-%E5%AE%89%E8%A3%85"><span class="toc-number">1.8.3.1.</span> <span class="toc-text">Mac 下 SDK 安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mac-%E4%B8%8B%E9%85%8D%E7%BD%AE-Golang-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">1.8.3.2.</span> <span class="toc-text">Mac 下配置 Golang 环境变量</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-%E8%AF%AD%E8%A8%80%E7%9A%84%E5%BC%80%E5%8F%91%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.9.</span> <span class="toc-text">Go 语言的开发步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows-%E4%B8%8B%E5%BC%80%E5%8F%91%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.9.1.</span> <span class="toc-text">Windows 下开发步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux-%E4%B8%8B%E5%BC%80%E5%8F%91%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.9.2.</span> <span class="toc-text">Linux 下开发步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mac-%E4%B8%8B%E5%BC%80%E5%8F%91%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.9.3.</span> <span class="toc-text">Mac 下开发步骤</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Golang-%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90"><span class="toc-number">1.10.</span> <span class="toc-text">Golang 执行流程分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%96%E8%AF%91"><span class="toc-number">1.10.1.</span> <span class="toc-text">什么是编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%BF%90%E8%A1%8C"><span class="toc-number">1.10.2.</span> <span class="toc-text">什么是运行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">1.11.</span> <span class="toc-text">Go 程序开发注意事项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Golang-%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6"><span class="toc-number">1.12.</span> <span class="toc-text">Golang 常用的转义字符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Golang-%E5%BC%80%E5%8F%91%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-number">1.13.</span> <span class="toc-text">Golang 开发常见问题和解决方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E9%87%8A"><span class="toc-number">1.14.</span> <span class="toc-text">注释</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.14.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Go-%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E6%B3%A8%E9%87%8A%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.14.2.</span> <span class="toc-text">Go 语言中的注释类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%84%E8%8C%83%E7%9A%84%E4%BB%A3%E7%A0%81%E9%A3%8E%E6%A0%BC"><span class="toc-number">1.14.3.</span> <span class="toc-text">规范的代码风格</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%B3%A8%E9%87%8A%E5%92%8C%E6%B3%A8%E9%87%8A%E9%A3%8E%E6%A0%BC"><span class="toc-number">1.14.3.1.</span> <span class="toc-text">正确的注释和注释风格</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A3%E7%A1%AE%E7%9A%84%E7%BC%A9%E8%BF%9B%E5%92%8C%E7%A9%BA%E7%99%BD"><span class="toc-number">1.14.3.2.</span> <span class="toc-text">正确的缩进和空白</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Golang-%E5%AE%98%E6%96%B9%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97"><span class="toc-number">1.15.</span> <span class="toc-text">Golang 官方编程指南</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Golang-%E6%A0%87%E5%87%86%E5%BA%93-API-%E6%96%87%E6%A1%A3"><span class="toc-number">1.15.1.</span> <span class="toc-text">Golang 标准库 API 文档</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dos-%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="toc-number">1.16.</span> <span class="toc-text">Dos 常用指令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Dos-%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.16.1.</span> <span class="toc-text">Dos 的基本介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dos-%E6%93%8D%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">1.16.2.</span> <span class="toc-text">Dos 操作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C%E6%8C%87%E4%BB%A4"><span class="toc-number">1.16.3.</span> <span class="toc-text">目录操作指令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BE%E7%A8%8B%E6%9D%A5%E6%BA%90"><span class="toc-number">1.17.</span> <span class="toc-text">课程来源</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/29c840ec.html" title="第二章 Golang 概述"><img src="/img/golang.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第二章 Golang 概述"/></a><div class="content"><a class="title" href="/post/29c840ec.html" title="第二章 Golang 概述">第二章 Golang 概述</a><time datetime="2022-05-11T07:00:59.189Z" title="Created 2022-05-11 15:00:59">2022-05-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/2db18b60.html" title="第一章 Golang 开山篇"><img src="/img/golang.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第一章 Golang 开山篇"/></a><div class="content"><a class="title" href="/post/2db18b60.html" title="第一章 Golang 开山篇">第一章 Golang 开山篇</a><time datetime="2022-05-11T06:46:35.270Z" title="Created 2022-05-11 14:46:35">2022-05-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/2f93ff5d.html" title="第十六章 网络"><img src="/img/linux.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第十六章 网络"/></a><div class="content"><a class="title" href="/post/2f93ff5d.html" title="第十六章 网络">第十六章 网络</a><time datetime="2022-05-05T00:33:30.068Z" title="Created 2022-05-05 08:33:30">2022-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/4decfb84.html" title="第十四章 软件包管理"><img src="/img/linux.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第十四章 软件包管理"/></a><div class="content"><a class="title" href="/post/4decfb84.html" title="第十四章 软件包管理">第十四章 软件包管理</a><time datetime="2022-05-05T00:33:30.068Z" title="Created 2022-05-05 08:33:30">2022-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/2421dd09.html" title="第十五章 存储介质"><img src="/img/linux.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第十五章 存储介质"/></a><div class="content"><a class="title" href="/post/2421dd09.html" title="第十五章 存储介质">第十五章 存储介质</a><time datetime="2022-05-05T00:33:30.068Z" title="Created 2022-05-05 08:33:30">2022-05-05</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 By StudentCWZ</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Toggle Between Traditional Chinese And Simplified Chinese">繁</button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Local search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (true){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-gilt-psi.vercel.app/',
+      region: 'ap-shanghai',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.vemoji)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-gilt-psi.vercel.app/',
+      region: 'ap-shanghai',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      document.getElementById('twikoo-count').innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script><script>function addGitalkSource () {
+  const ele = document.createElement('link')
+  ele.rel = 'stylesheet'
+  ele.href= 'https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css'
+  document.getElementsByTagName('head')[0].appendChild(ele)
+}
+
+function loadGitalk () {
+  function initGitalk () {
+    var gitalk = new Gitalk(Object.assign({
+      clientID: '339388df88d5b5d67362',
+      clientSecret: 'f7a589f837f79a63fb47efae87c7aca989ed1507',
+      repo: 'blog-comments',
+      owner: 'StudentCWZ',
+      admin: ['StudentCWZ'],
+      id: '0553681ac89c8f9c9decda768e062e64',
+      updateCountCallback: commentCount
+    },null))
+
+    gitalk.render('gitalk-container')
+  }
+
+  if (typeof Gitalk === 'function') initGitalk()
+  else {
+    addGitalkSource()
+    getScript('https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js').then(initGitalk)
+  }
+}
+
+function commentCount(n){
+  let isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+  if (isCommentCount) {
+    isCommentCount.innerHTML= n
+  }
+}
+
+if ('Twikoo' === 'Gitalk' || !false) {
+  if (false) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+  else loadGitalk()
+} else {
+  function loadOtherComment () {
+    loadGitalk()
+  }
+}</script></div><script src="/js/jquery.min.js"></script><script src="/js/mouse_snow.js" defer></script><script src="/js/sakura.js" defer></script><script src="/js/timing.js" defer></script><script src="https://pv.sohu.com/cityjson?ie=utf-8" defer></script><script src="/js/ip_content.js" defer></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.16/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?StudentCWZ";
+            var git_color =['#ebedf0', '#f1f8ff', '#dbedff', '#c8e1ff', '#79b8ff', '#2188ff', '#0366d6', '#005cc5', '#044289', '#032f62', '#05264c'];
+            var git_user ="StudentCWZ";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style>undefined</style><script data-pjax>function history_calendar_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div>';
+                console.log('已挂载history_calendar')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            history_calendar_injector_config()
+        } </script><script data-pjax  src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script><script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="https://npm.elemecdn.com/hexo-butterfly-clock/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://npm.elemecdn.com/hexo-butterfly-clock/lib/clock.min.js"></script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="workboard"></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title=""><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v3.8.2" title=""><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/runtime.js"></script><!-- hexo injector body_end end --><script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body></html>
